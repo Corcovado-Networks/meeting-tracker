@@ -1,0 +1,3422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Intelligence Dashboard - Elisity</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #0a0e27;
+            --color-bg-secondary: #14192d;
+            --color-bg-tertiary: #1d2342;
+            --color-accent: #00c4b4;
+            --color-accent-dark: #00a89f;
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #a0a8b8;
+            --color-text-tertiary: #7a8294;
+            --color-border: #2a2f45;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-info: #3b82f6;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--color-bg-secondary);
+            border-bottom: 1px solid var(--color-border);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #00d9c4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .sync-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: var(--color-bg-tertiary);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn:hover {
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            border-color: var(--color-accent);
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            border-color: var(--color-accent);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-accent-dark);
+            border-color: var(--color-accent-dark);
+        }
+
+        .btn-small {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: var(--color-text-primary);
+        }
+
+        .tab.active {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+        }
+
+        .tab-badge {
+            display: inline-block;
+            margin-left: 0.5rem;
+            padding: 0.125rem 0.5rem;
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-detail {
+            font-size: 0.875rem;
+            color: var(--color-text-tertiary);
+        }
+
+        /* Lists */
+        .list-container {
+            background-color: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .list-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            background-color: var(--color-bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .list-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .list-item {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .list-item:hover {
+            background-color: var(--color-bg-tertiary);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item-left {
+            flex: 1;
+        }
+
+        .list-item-title {
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            color: var(--color-text-primary);
+        }
+
+        .list-item-meta {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .list-item-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            transition: all 0.2s ease;
+            padding: 0.25rem;
+        }
+
+        .star-btn:hover,
+        .star-btn.starred {
+            color: var(--color-accent);
+        }
+
+        /* Meeting Card (expanded) */
+        .meeting-expanded {
+            background-color: var(--color-bg-tertiary);
+            border: 1px solid var(--color-accent);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .meeting-expanded-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .meeting-expanded-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .meeting-expanded-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meeting-expanded-meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .meeting-expanded-meta-value {
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 1rem 0 0.75rem 0;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+        }
+
+        .key-points {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .key-points li {
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            position: relative;
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .key-points li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--color-accent);
+            font-weight: bold;
+        }
+
+        .talk-time-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .talk-time-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .talk-time-name {
+            width: 100px;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .talk-time-bar {
+            flex: 1;
+            height: 24px;
+            background-color: var(--color-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+
+        .talk-time-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-accent) 0%, #00d9c4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
+        .talk-time-pct {
+            font-size: 0.75rem;
+            color: var(--color-bg);
+            font-weight: 600;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        .source-link {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .source-link:hover {
+            color: var(--color-accent-dark);
+            text-decoration: underline;
+        }
+
+        /* Insight Cards */
+        .insight-card {
+            background-color: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .insight-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .insight-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .insight-card-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+        }
+
+        .insight-badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            font-weight: 600;
+        }
+
+        .insight-badge.positive { background: rgba(16, 185, 129, 0.15); color: var(--color-success); }
+        .insight-badge.caution { background: rgba(245, 158, 11, 0.15); color: var(--color-warning); }
+        .insight-badge.alert { background: rgba(239, 68, 68, 0.15); color: var(--color-danger); }
+        .insight-badge.info { background: rgba(59, 130, 246, 0.15); color: var(--color-info); }
+
+        .insight-card-body {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        .insight-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0.5rem 0;
+        }
+
+        .insight-bar-label {
+            min-width: 100px;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .insight-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--color-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .insight-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .insight-bar-value {
+            min-width: 40px;
+            text-align: right;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .slack-thread-link {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--color-bg);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .slack-thread-link:last-child { margin-bottom: 0; }
+
+        .slack-thread-channel {
+            font-size: 0.8rem;
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .slack-thread-text {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .slack-thread-meta {
+            font-size: 0.75rem;
+            color: var(--color-text-tertiary);
+            margin-top: 0.25rem;
+        }
+
+        .theme-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 0.375rem;
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            margin: 0.15rem;
+        }
+
+        .theme-tag.hot {
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        /* Action Items Table */
+        .action-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .action-items-table thead {
+            background-color: var(--color-bg-tertiary);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .action-items-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .action-items-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .action-items-table tbody tr:hover {
+            background-color: var(--color-bg-tertiary);
+        }
+
+        .action-items-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-icon {
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 0.5rem;
+        }
+
+        .status-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .status-open { color: var(--color-info); }
+        .status-in-progress { color: var(--color-warning); }
+        .status-done { color: var(--color-success); }
+
+        .overdue {
+            color: var(--color-danger);
+            font-weight: 600;
+        }
+
+        .priority-high { color: var(--color-danger); }
+        .priority-normal { color: var(--color-warning); }
+        .priority-low { color: var(--color-success); }
+
+        /* Search */
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background-color: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            color: var(--color-text-primary);
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(0, 196, 180, 0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.625rem 1rem;
+            background-color: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            border-color: var(--color-accent);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--color-accent);
+            color: var(--color-text-primary);
+        }
+
+        /* Search Results */
+        .search-result {
+            background-color: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .search-result:hover {
+            border-color: var(--color-accent);
+            background-color: var(--color-bg-tertiary);
+        }
+
+        .search-result-title {
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .search-result-snippet {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .search-result-source {
+            font-size: 0.75rem;
+            color: var(--color-text-tertiary);
+            margin-top: 0.5rem;
+        }
+
+        /* Modal/Inline Editor */
+        .editor-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 39, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .editor-overlay.active {
+            display: flex;
+        }
+
+        .editor-panel {
+            background-color: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .editor-panel-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            color: var(--color-text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(0, 196, 180, 0.1);
+        }
+
+        .status-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .status-btn {
+            padding: 0.75rem;
+            background-color: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: 0.5rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .status-btn:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .status-btn.selected {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            color: var(--color-bg);
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .editor-actions button {
+            flex: 1;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* No Data */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            color: var(--color-text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-subtext {
+            font-size: 0.875rem;
+            opacity: 0.7;
+        }
+
+        /* Scrollbars */
+        .list::-webkit-scrollbar,
+        .editor-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .list::-webkit-scrollbar-track,
+        .editor-panel::-webkit-scrollbar-track {
+            background: var(--color-bg-secondary);
+        }
+
+        .list::-webkit-scrollbar-thumb,
+        .editor-panel::-webkit-scrollbar-thumb {
+            background: var(--color-border);
+            border-radius: 4px;
+        }
+
+        .list::-webkit-scrollbar-thumb:hover,
+        .editor-panel::-webkit-scrollbar-thumb:hover {
+            background: var(--color-accent);
+        }
+
+        /* Keyboard Shortcuts Hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            color: var(--color-text-tertiary);
+            background-color: var(--color-bg-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--color-border);
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .keyboard-hint:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-left,
+            .header-right {
+                width: 100%;
+            }
+
+            .header-right {
+                justify-content: flex-start;
+            }
+
+            .tabs {
+                gap: 0;
+                overflow-x: auto;
+                margin-bottom: 1.5rem;
+            }
+
+            .tab {
+                padding: 0.75rem 1rem;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-items-table {
+                font-size: 0.85rem;
+            }
+
+            .action-items-table th,
+            .action-items-table td {
+                padding: 0.75rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .list-item {
+                flex-direction: column;
+            }
+
+            .list-item-meta {
+                width: 100%;
+            }
+
+            .status-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .editor-panel {
+                width: 95%;
+            }
+
+            .keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">⚡ Meeting Intelligence</div>
+            <div class="sync-status">
+                <span class="sync-indicator"></span>
+                <span id="syncStatus">Last synced: Never</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="btn btn-primary" id="syncNowBtn" title="Trigger a fresh sync from Krisp & Slack (Ctrl+S)" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span id="syncIcon">🔄</span> Sync Now
+            </button>
+            <div class="btn-group">
+                <button class="btn" id="importBtn" title="Import meetings_db.json (Ctrl+Shift+I)">📥 Import</button>
+                <button class="btn" id="exportBtn" title="Export to meetings_db.json (Ctrl+Shift+E)">📤 Export</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab active" data-tab="overview" title="Press 1">
+                Overview
+                <span class="tab-badge" id="overviewBadge">0</span>
+            </button>
+            <button class="tab" data-tab="meetings" title="Press 2">
+                Meetings
+                <span class="tab-badge" id="meetingsBadge">0</span>
+            </button>
+            <button class="tab" data-tab="my-actions" title="Press 3">
+                My Action Items
+                <span class="tab-badge" id="myActionsBadge">0</span>
+            </button>
+            <button class="tab" data-tab="team-actions" title="Press 4">
+                Team Action Items
+                <span class="tab-badge" id="teamActionsBadge">0</span>
+            </button>
+            <button class="tab" data-tab="insights" title="Press 5">
+                Insights
+                <span class="tab-badge" id="insightsBadge" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">!</span>
+            </button>
+            <button class="tab" data-tab="search" title="Press 6 or /">
+                Search
+            </button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Meetings</div>
+                    <div class="stat-value" id="totalMeetings">0</div>
+                    <div class="stat-detail">All time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">My Open Items</div>
+                    <div class="stat-value" id="openActions">0</div>
+                    <div class="stat-detail">Assigned to you</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Overdue Items</div>
+                    <div class="stat-value" id="overdueActions">0</div>
+                    <div class="stat-detail">Need immediate attention</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">This Week</div>
+                    <div class="stat-value" id="weekMeetings">0</div>
+                    <div class="stat-detail">Meetings scheduled</div>
+                </div>
+            </div>
+
+            <!-- Recent Meetings -->
+            <div class="list-container">
+                <div class="list-header">
+                    <h3>Recent Meetings</h3>
+                </div>
+                <div class="list" id="recentMeetingsList"></div>
+            </div>
+
+            <!-- My Outstanding Actions -->
+            <div class="list-container" style="margin-top: 2rem;">
+                <div class="list-header">
+                    <h3>My Outstanding Action Items</h3>
+                </div>
+                <div class="list" id="myOutstandingActionsList"></div>
+            </div>
+
+            <!-- Team Outstanding Actions -->
+            <div class="list-container" style="margin-top: 2rem;">
+                <div class="list-header">
+                    <h3>Team Outstanding Action Items</h3>
+                </div>
+                <div class="list" id="teamOutstandingActionsList"></div>
+            </div>
+        </div>
+
+        <!-- Meetings Tab -->
+        <div id="meetings" class="tab-content">
+            <div class="search-container">
+                <input type="text" class="search-input" id="meetingsSearch" placeholder="Search by title or key points...">
+                <input type="date" class="search-input" style="flex: 0 1 150px;" id="meetingsDateFrom" title="From date">
+                <input type="date" class="search-input" style="flex: 0 1 150px;" id="meetingsDateTo" title="To date">
+            </div>
+            <div class="list-container">
+                <div class="list" id="meetingsList"></div>
+            </div>
+        </div>
+
+        <!-- My Action Items Tab -->
+        <div id="my-actions" class="tab-content">
+            <div class="filter-group" style="margin-bottom: 1.5rem;">
+                <button class="filter-btn active" data-status-filter-my="all">All</button>
+                <button class="filter-btn" data-status-filter-my="open">Open</button>
+                <button class="filter-btn" data-status-filter-my="in-progress">In Progress</button>
+                <button class="filter-btn" data-status-filter-my="done">Done</button>
+            </div>
+            <div class="list-container">
+                <div style="overflow-x: auto;">
+                    <table class="action-items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"></th>
+                                <th>Description</th>
+                                <th style="width: 200px;">Meeting</th>
+                                <th style="width: 120px;">Due Date</th>
+                                <th style="width: 80px;">Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myActionItemsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Action Items Tab -->
+        <div id="team-actions" class="tab-content">
+            <div class="filter-group" style="margin-bottom: 1.5rem;">
+                <button class="filter-btn active" data-status-filter-team="all">All</button>
+                <button class="filter-btn" data-status-filter-team="open">Open</button>
+                <button class="filter-btn" data-status-filter-team="in-progress">In Progress</button>
+                <button class="filter-btn" data-status-filter-team="done">Done</button>
+            </div>
+            <div class="list-container">
+                <div style="overflow-x: auto;">
+                    <table class="action-items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"></th>
+                                <th>Description</th>
+                                <th style="width: 120px;">Owner</th>
+                                <th style="width: 200px;">Meeting</th>
+                                <th style="width: 120px;">Due Date</th>
+                                <th style="width: 80px;">Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teamActionItemsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Tab -->
+        <div id="insights" class="tab-content">
+            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="stat-card">
+                    <div class="stat-label">Avg Talk Time</div>
+                    <div class="stat-value" id="avgTalkTime">—</div>
+                    <div class="stat-detail">Your share of meetings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Meeting Length</div>
+                    <div class="stat-value" id="avgMeetingLen">—</div>
+                    <div class="stat-detail">Minutes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Meetings This Week</div>
+                    <div class="stat-value" id="insightWeekCount">—</div>
+                    <div class="stat-detail">Across all sources</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">AI Completion Rate</div>
+                    <div class="stat-value" id="aiCompletionRate">—</div>
+                    <div class="stat-detail">Your action items</div>
+                </div>
+            </div>
+
+            <!-- Communication Style -->
+            <div class="list-container" style="margin-top: 1.5rem;">
+                <div class="list-header">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem;">🎙️ Communication Style</h3>
+                </div>
+                <div id="commStyleInsights" style="padding: 1.25rem;"></div>
+            </div>
+
+            <!-- Product Strategy -->
+            <div class="list-container" style="margin-top: 1.5rem;">
+                <div class="list-header">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem;">🧭 Product Strategy & Direction</h3>
+                </div>
+                <div id="strategyInsights" style="padding: 1.25rem;"></div>
+            </div>
+
+            <!-- Slack Intelligence -->
+            <div class="list-container" style="margin-top: 1.5rem;">
+                <div class="list-header">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem;">💬 Slack Thread Intelligence</h3>
+                </div>
+                <div id="slackInsights" style="padding: 1.25rem;"></div>
+            </div>
+        </div>
+
+        <!-- Search Tab -->
+        <div id="search" class="tab-content">
+            <div class="search-container">
+                <input type="text" class="search-input" id="globalSearch" placeholder="Search meetings, key points, and action items... (press / to focus)">
+            </div>
+            <div id="searchResults"></div>
+        </div>
+    </div>
+
+    <!-- Action Item Editor -->
+    <div class="editor-overlay" id="editorOverlay">
+        <div class="editor-panel">
+            <button class="close-btn" id="closeEditorBtn">✕</button>
+            <div class="editor-panel-title">Edit Action Item</div>
+
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <div class="status-buttons" id="statusButtons"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Due Date</label>
+                <input type="date" class="form-input" id="actionDueDate">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Priority</label>
+                <select class="form-select" id="actionPriority">
+                    <option value="low">Low</option>
+                    <option value="normal">Normal</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Notes</label>
+                <textarea class="form-textarea" id="actionNotes" placeholder="Add any notes..."></textarea>
+            </div>
+
+            <div class="editor-actions">
+                <button class="btn" id="cancelEditorBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveEditorBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Hint -->
+    <div class="keyboard-hint">
+        Use <strong>/</strong> to search • <strong>1-6</strong> to navigate tabs • <strong>Ctrl+S</strong> to sync
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+
+    <script>
+        // Embedded meeting data (auto-generated by sync script)
+        const EMBEDDED_DATA = {
+  "last_sync": "2026-03-25T05:00:00Z",
+  "meetings": [
+    {
+      "id": "mtg-008",
+      "title": "Elisity - Catalyst Center InterOp conversation",
+      "date": "2026-03-24T18:59:00Z",
+      "duration_minutes": 59,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/n/Elisity---Catalyst-Center-InterOp-conversation--019d2137f569769f8be8eb1dc201e3f0",
+      "participants": [
+        "Brent",
+        "Speaker 2",
+        "Speaker 3",
+        "Speaker 4",
+        "Speaker 5",
+        "Speaker 6",
+        "Speaker 7",
+        "Speaker 8",
+        "Speaker 9",
+        "Speaker 10",
+        "Speaker 11",
+        "Speaker 12",
+        "Speaker 13"
+      ],
+      "talk_time": {
+        "Brent": 30,
+        "Speaker 7": 16,
+        "Speaker 6": 15,
+        "Speaker 2": 10,
+        "Speaker 4": 7,
+        "Speaker 11": 5,
+        "Speaker 3": 4,
+        "Speaker 8": 3,
+        "Speaker 9": 2,
+        "Speaker 10": 2,
+        "Speaker 12": 2,
+        "Speaker 13": 2,
+        "Speaker 5": 2
+      },
+      "key_points": [
+        "Catalyst Center versions 2.3.5+ introduced two additional DNS flow monitors per interface, consuming all four available flow monitor slots and leaving no room for Elisity's ingress/egress monitors \u2014 the root cause of the conflict.",
+        "A key config discrepancy was identified: Elisity's flow records are missing the 'match application name' field required for AVC mode, which would otherwise allow multiple monitors on the same interface.",
+        "Elisity's go-forward fix involves two virtual edge behavior changes: retaining global NetFlow config when no physical interfaces are programmed, and updating the VE to process Catalyst Center's flow record format (initiator/responder fields) instead of requiring its own source/destination records.",
+        "Elisity's support documentation for Catalyst Center coexistence was written for the AVC-only config, not the newer four-monitor DNS behavior, meaning the published guidance does not apply to CHOP's current environment.",
+        "Even if the AVC mismatch were corrected, the four-monitor limit imposed by Catalyst Center's current behavior means Elisity and Catalyst Center cannot coexist on the same interfaces today.",
+        "An engineering special or early release was requested by CHOP but Jesse advised against it, citing QA risks for network-managing software; only a service-impacting P1 scenario would justify bypassing normal release cycles.",
+        "Catalyst Center's compliance engine was flagged as a risk: any config inserted outside its templates will be overwritten; the recommended mitigation is using Catalyst Center templating and excluding Elisity's security policy commands from compliance checks.",
+        "As a temporary workaround, CHOP agreed to exempt a small number of Jolly Lab switches from Catalyst Center management, accepting degraded compliance and limited operational capability (no code upgrades, no pre/post checks) as a short-term trade-off.",
+        "Maine campus \u2014 representing ~65% of CHOP's infrastructure including all APs and switches \u2014 must remain on Catalyst Center telemetry; losing Maine flow data would effectively eliminate meaningful network visibility across the environment.",
+        "Disabling Elisity flow collection on a switch is a per-switch toggle in the Elisity console; historical NetFlow data is retained for ~30 days, but new analytics needed for enforcement policy modeling would stop accumulating.",
+        "Wireless controllers (WLCs) are also affected, though multiple flow monitor profiles are supported via CLI on newer IOS-XE code; Catalyst Center manages WLC config through programming interfaces, not the web UI.",
+        "In the end-state solution, Catalyst Center will be the source of truth for device configuration and flow collection, while Elisity will act as a passive observer \u2014 owning only security policy elements such as SGACLs and SXP mappings.",
+        "Release containing both fixes is targeted for end of April, with customer upgrades beginning early May; CHOP can be prioritized to the earliest upgrade cycle given the criticality.",
+        "A follow-up call was agreed upon for the next day, including Amar, Steven, John, and Rob, to determine the minimum requirements needed to keep the enforcement program progressing while the fix is in development."
+      ],
+      "summary": "Deep technical session on the Catalyst Center / Elisity NetFlow coexistence conflict at CHOP. Root cause confirmed: Catalyst Center 2.3.5+ consumes all four available flow monitor slots per interface with DNS monitors, blocking Elisity's monitors. Two VE fixes were scoped (retain global config, process CC flow record format); release targeted for end of April with CHOP prioritized for earliest upgrade. Temporary workaround agreed: exempt Jolly Lab switches from Catalyst Center while Maine campus stays on Catalyst Center telemetry. End-state architecture positions Catalyst Center as source of truth for flow collection, with Elisity owning only SGACLs and SXP policy elements.",
+      "tags": [
+        "CHOP",
+        "Catalyst Center",
+        "interop",
+        "NetFlow",
+        "technical",
+        "customer support",
+        "engineering"
+      ],
+      "starred": false,
+      "slack_threads": [
+        "https://elisity.slack.com/archives/C0AP7FN0TEU/p1774352020219789",
+        "https://elisity.slack.com/archives/C07M8GBMFM0/p1774365432080429",
+        "https://elisity.slack.com/archives/C07M8GBMFM0/p1774357190724319"
+      ]
+    },
+    {
+      "id": "mtg-007",
+      "title": "Customer Deployment & Roadmap Session",
+      "date": "2026-03-24T16:50:00Z",
+      "duration_minutes": 38,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/12-50-PM---Microsoft-Teams-meeting-March-24--019d20c177407079a53c7121aa45dc9a",
+      "participants": [
+        "Brent",
+        "Speaker 2",
+        "Speaker 3",
+        "Speaker 4",
+        "Speaker 5",
+        "Speaker 6",
+        "Speaker 7",
+        "Speaker 8",
+        "Speaker 9"
+      ],
+      "talk_time": {
+        "Brent": 74,
+        "Speaker 9": 9,
+        "Speaker 4": 6,
+        "Speaker 6": 5,
+        "Speaker 3": 2,
+        "Speaker 7": 1,
+        "Speaker 8": 1,
+        "Speaker 2": 1,
+        "Speaker 5": 1
+      },
+      "key_points": [
+        "New 9250 switch stacks need to be deployed at production floors as soon as possible to cover operating rooms, community care, and lab areas before discovery and policy enforcement begins.",
+        "Consistency risk flagged: if discovery and rules start at some sites while other sites with existing devices remain undeployed, policy enforcement will be inconsistent across the organization.",
+        "Even without full site coverage at Bridgewood/Ridgewood, enough density exists to capture the majority of devices and begin device audit classification.",
+        "Enforcement can proceed per-site and per-switch once devices are discovered and classified, with trust scoring tracked over time \u2014 enforcement doesn't need to happen at the site level simultaneously.",
+        "Infusion pumps and Echo devices cited as concrete examples of policy-based communication rules \u2014 devices need to talk to specific servers (e.g., dynamic server for Echo), and those rules replicate automatically when new sites are onboarded.",
+        "Group communication policies will define which device types can communicate with which groups, with the ability to shut off unnecessary inter-group communication and refine granularity over time.",
+        "Brent presented the Elisity product roadmap: identity-driven zero trust security for every device, user, and workload, with emphasis on simplified deployment and operations.",
+        "New capabilities highlighted: AI-driven device classification using private LLM (not public API calls), Elisity Assistant with natural language interaction added in latest release, monthly platform releases with new identity graph integrations (Assemble connector recently added).",
+        "Data plane expansion continues: support for Cisco 9350 and new Juniper switch models added in latest release, with ongoing vendor additions planned.",
+        "Cisco licensing clarified: DNA Essentials supports discovery and analytics but enforcement requires DNA Advantage or Network Advantage; customer is in process of replacing 3850s within three months.",
+        "Customer confirmed plans to migrate to Epic Cloud over the next two years, moving a large portion of applications \u2014 this will significantly change network topology and traffic patterns.",
+        "AI model data privacy discussed: Elisity uses single-tenant SaaS architecture with no cross-customer data sharing today; model currently trained only on internal documentation, with potential for anonymized cross-customer learning in the future.",
+        "Customer expressed strong interest in cross-hospital shared learning for AI models to avoid retraining after cloud migration, seeing value in understanding traffic patterns from other healthcare environments.",
+        "AI agent detection on the network discussed as emerging use case \u2014 identifying unauthorized AI agents, applying strict controls or quarantine based on whether they're on company-owned systems.",
+        "Weekly meeting reduced from one hour to 30 minutes as breakout sessions are introduced; first breakout session for 400 Market Street location scheduled for Friday."
+      ],
+      "summary": "Customer weekly deployment meeting combining operational status with a product roadmap presentation. First half covered switch deployment priorities (9250 stacks for production floors), device discovery consistency across sites, and per-site enforcement strategy. Second half featured Brent's roadmap pitch covering AI-driven classification, Elisity Assistant, cloud workload discovery, and data plane expansion. Customer engaged deeply on AI model privacy and cross-hospital shared learning, and confirmed Epic Cloud migration plans over the next two years.",
+      "tags": [
+        "customer",
+        "deployment",
+        "roadmap",
+        "healthcare",
+        "AI",
+        "Epic Cloud",
+        "enforcement"
+      ],
+      "starred": false
+    },
+    {
+      "id": "mtg-009",
+      "title": "CHOP Deployment Planning - Teams Session",
+      "date": "2026-03-24T12:50:00Z",
+      "duration_minutes": 42,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/12-50-PM---Microsoft-Teams-meeting-March-24--019d20c177407079a53c7121aa45dc9a",
+      "participants": [
+        "Brent",
+        "Speaker 2",
+        "Speaker 3",
+        "Speaker 4",
+        "Speaker 5",
+        "Speaker 6",
+        "Speaker 7",
+        "Speaker 8",
+        "Speaker 9"
+      ],
+      "talk_time": {
+        "Brent": 74,
+        "Speaker 9": 9,
+        "Speaker 4": 6,
+        "Speaker 6": 5,
+        "Speaker 3": 2,
+        "Speaker 7": 1,
+        "Speaker 8": 1,
+        "Speaker 2": 1,
+        "Speaker 5": 1
+      },
+      "key_points": [
+        "New 9250 chassis and switch stacks need to be deployed on production floors (operating rooms, community care, lab) as soon as possible",
+        "Device discovery should cover all production floor switches before policy rules are created to ensure consistency across sites",
+        "Policy group (PG) matching fidelity improves with more devices discovered and classified \u2014 enforcement can happen per-switch level",
+        "Enforcement approach discussed: start per-site, then expand \u2014 can achieve enforcement once device tracking establishes trust tags",
+        "Device audit classification is critical \u2014 more devices classified means higher-fidelity rules and better policy matching",
+        "Risk identified: if rules are created before all devices are discovered, inconsistencies will occur across sites like Bridgewood and Ridgewood"
+      ],
+      "summary": "CHOP deployment planning session focused on new switch stack rollout across production floors (operating rooms, community care, labs). Discussed device discovery strategy \u2014 need comprehensive discovery before creating enforcement rules to avoid inconsistency. Agreed enforcement can start per-switch and expand per-site, with trust tags building over time as devices are tracked and classified.",
+      "tags": [
+        "CHOP",
+        "deployment",
+        "enforcement",
+        "discovery",
+        "switch-stack"
+      ],
+      "starred": false
+    },
+    {
+      "id": "mtg-001",
+      "title": "Cloud Workloads Architecture Sync",
+      "date": "2026-03-24T11:03:00Z",
+      "duration_minutes": 43,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/n/Cloud-Workloads-Architecture-Sync--019d205fb58a76dca4a118d1d882ffc1",
+      "participants": [
+        "Brent",
+        "Miha",
+        "Chuck",
+        "Paul",
+        "Dana"
+      ],
+      "talk_time": {
+        "Brent": 50,
+        "Miha": 24,
+        "Chuck": 16,
+        "Paul": 7,
+        "Dana": 2
+      },
+      "key_points": [
+        "Phase 1 scope is intentionally limited \u2014 importing AWS data and onboarding initial workloads \u2014 with Kubernetes and more complex scenarios deferred to later phases.",
+        "Core architectural agreement reached: a workload is a distinct object from a device, consists of multiple interfaces, can belong to multiple groups, and may require different policies per interface.",
+        "SGT-based enforcement tied to IP-to-interface mapping is the only current enforcement capability, making interface-level IP assignment the critical dependency for campus-to-cloud policy.",
+        "Interface as an attribute vs. a separate object was debated; consensus leaned toward treating the interface as an attribute of the workload to avoid splitting workloads and to address existing customer complaints about unlinked interfaces.",
+        "Concern raised that 60-80% of customers may resemble Licity \u2014 no campus-to-cloud traffic, fully internet-facing workloads \u2014 meaning the enforcement use case may not apply to the majority.",
+        "Three customer cloud topology buckets identified: static campus-to-EC2 (clear enforcement target for Phase 1), purely cloud-native with no campus traffic (no enforcement needed), and hybrid behind load balancers (more complex, deferred).",
+        "GSK cited as a concrete example \u2014 20,000 VMs and 4,450 pods today, trending toward managed Kubernetes, though actual migration pace may lag their stated plans.",
+        "Customer vertical matters significantly: healthcare customers (e.g., Providence) are mostly on-prem and slow to adopt cloud, while others like Marsh are actively requesting this capability.",
+        "Chuck proposed a two-matrix model: one for campus policy groups using SGT, and a separate one for cloud/Kubernetes workloads using a different enforcement method, with interface objects attached to workloads.",
+        "Child policies concept discussed as a potential mechanism to support workload grouping and SGT assignment, but confirmed to be on hold with no current agreement.",
+        "CD Projekt Red flagged as a strong Phase 1 candidate \u2014 heavily automated workloads, campus-to-cloud traffic, AWS-based, and a known contact available to potentially share data.",
+        "Scale is a key concern \u2014 GSK's 20,000 workloads would generate a large number of static mappings, raising questions about DZ design; a dedicated workload DZ was proposed."
+      ],
+      "summary": "Architecture sync focused on extending Elisity's policy enforcement from campus to cloud workloads (primarily AWS). Phase 1 will focus on static campus-to-EC2 enforcement with Kubernetes deferred; key debates covered workload vs device modeling, interface attributes, and a two-matrix policy approach.",
+      "tags": [
+        "architecture",
+        "cloud",
+        "AWS",
+        "workloads",
+        "Phase 1"
+      ],
+      "starred": false
+    },
+    {
+      "id": "mtg-002",
+      "title": "Account Strategy & Roadmap Sync",
+      "date": "2026-03-24T10:22:00Z",
+      "duration_minutes": 9,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/n/Account-Strategy-Roadmap-Sync--019d203a7eeb74eaacc544373e13c052",
+      "participants": [
+        "Brent",
+        "Speaker 2"
+      ],
+      "talk_time": {
+        "Brent": 60,
+        "Speaker 2": 40
+      },
+      "key_points": [
+        "35 first meetings tracked since early February, signaling strong pipeline momentum but raising the question of which deals are genuinely viable.",
+        "GSK presentation went well, though Brent acknowledged roughly 50% of it was aspirational \u2014 committed areas are workload discovery and North-South policy, not lateral movement control.",
+        "Lateral movement control was flagged as a fundamentally different product requiring support across cloud providers, on-prem data centers, bare metal, VMs, and hypervisors.",
+        "GSK remains a credible target given the established relationship and credit built up; focusing on the container space was seen as a realistic, simplified story.",
+        "UBS was assessed as too complex to pursue seriously \u2014 massive scale, heterogeneous network, every cloud and VM type \u2014 making it a poor fit given current product maturity.",
+        "EBS follow-up with James was discussed; the current stance is to invite him back if he has a concrete idea, otherwise the opportunity is effectively parked.",
+        "Renewal risk flagged for an existing account \u2014 only deployed in the OT environment with an all-you-can-eat license they won't fully utilize in the near term.",
+        "A roadmap session of roughly one hour was agreed upon to arm the security team with collateral and insight ahead of their internal whiteboard session against IT.",
+        "Ongoing tension between the security team and IT team at the account, with IT pushing Cisco and Palo Alto while security is advocating for the current solution.",
+        "Brent will use the same roadmap presentation delivered at GSK, covering both workload and AI topics, to support the security team's position."
+      ],
+      "summary": "Quick strategy sync reviewing pipeline health (35 first meetings since Feb), assessing key accounts (GSK positive, UBS too complex, EBS parked), and planning a roadmap session to support a customer's security team in an internal competitive battle against IT.",
+      "tags": [
+        "strategy",
+        "pipeline",
+        "GSK",
+        "UBS",
+        "accounts",
+        "roadmap"
+      ],
+      "starred": false
+    },
+    {
+      "id": "mtg-003",
+      "title": "CHOP Escalation Prep Session",
+      "date": "2026-03-24T08:31:00Z",
+      "duration_minutes": 20,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/n/CHOP-Escalation-Prep-Session--019d1fd45a40756cbd86b28bedf5634e",
+      "participants": [
+        "Brent",
+        "Pete",
+        "Ralph",
+        "Jesse",
+        "Taylor",
+        "Agata"
+      ],
+      "talk_time": {
+        "Brent": 50,
+        "Pete": 30,
+        "Ralph": 20
+      },
+      "key_points": [
+        "CHOP's escalation is driven by internal politics \u2014 friction between three misaligned groups: Amar (implementation), Stephen/John (IT operations), and Dave Kerr (solutions architecture).",
+        "Root cause: CHOP notified the vendor of their DNA Center usage in September, sent configs showing an older code version, but later upgraded to 2.3.5 and enabled additional flow behavior without engaging Cisco or the vendor.",
+        "Technical finding: in version 2.3.5, network services analytics cannot be selectively disabled; enabling it produces a different config that omits Source and Destination IP values.",
+        "John, the network operations lead, independently started using flows in Catalyst Center for troubleshooting and monitoring without coordinating with the vendor.",
+        "Two damaging perceptions to counter on the call: that the vendor knew about the problem and ignored it, and that only CHOP is actively working on a resolution.",
+        "Testing with Evolving confirmed that adding the vendor's exporter to the DNAC Global Flow Monitor did receive flows, but parsing failed due to different field headers.",
+        "Planned 2064 behavior change: leave global Netflow config on the switch, set all interfaces to manually disabled, allow CHOP to add the vendor's exporter to their flow monitor.",
+        "A published article by Taylor Caldwell is being cited by CHOP as evidence of a gap; the article is accurate for older configs but no longer reflects current Catalyst Center behavior.",
+        "Broader impact: Orlando Health and at least five or six other customers are expected to start using Catalyst Center flows, making this fix a wider priority.",
+        "Presentation structure agreed for the afternoon CAP call: Pete builds the background and timeline summary, Jesse adds slides on the planned fix."
+      ],
+      "summary": "Preparation session for the CHOP escalation call, driven by internal politics and a technical misalignment after CHOP upgraded to Catalyst Center 2.3.5 without coordination. Team aligned on root cause narrative, a planned fix (2064 behavior change), and presentation structure for the afternoon CAP call.",
+      "tags": [
+        "CHOP",
+        "escalation",
+        "Catalyst Center",
+        "technical",
+        "customer support"
+      ],
+      "starred": false
+    },
+    {
+      "id": "mtg-005",
+      "title": "ELT Weekly Leadership Sync",
+      "date": "2026-03-23T10:00:00Z",
+      "duration_minutes": 32,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/n/ELT-Weekly-Leadership-Sync--019d1b6cc47070acab44c575f700bb3b",
+      "participants": [
+        "Brent",
+        "Speaker 2",
+        "Speaker 3",
+        "Speaker 4",
+        "Speaker 7",
+        "Charlie",
+        "James",
+        "Esther"
+      ],
+      "talk_time": {
+        "Brent": 30,
+        "Speaker 2": 17,
+        "Speaker 3": 17,
+        "Speaker 4": 17,
+        "Speaker 7": 10,
+        "Charlie": 5,
+        "James": 2,
+        "Esther": 2
+      },
+      "key_points": [
+        "RSA event exceeded expectations \u2014 strong cross-pollination between existing customers and prospects, with Minoz confirming interest in returning next year.",
+        "Palantir is running McKinsey-style top-down AI engagements with hospital CEOs and boards, locking out CISOs from platform visibility.",
+        "Q1 revenue tracking closer to $4.5M vs. a $4.9M target, with 4-5 deals needing to close; five PVs done in March with four more needed in April.",
+        "Pipeline concentration risk is a key concern for both Q1 and Q2.",
+        "Stage two-and-a-half is identified as the core funnel problem: qualified prospects without full budget or decision-maker readiness falling into a black hole after AE handoff.",
+        "Huntington kickoff completed \u2014 projected to be the largest deployment ever at 1,500 sites; also marks the company's first entry into the financials vertical.",
+        "GSK EBC ran four and a half hours \u2014 only 30 minutes on current state, with four hours focused on AI and workflow strategy.",
+        "Brent's AI pitch was well-received at GSK, but the scale of positioning, CX, deployment, content, and training requirements around AI is seen as overwhelming.",
+        "Shannon's feedback from the EBC was positive \u2014 Mike noted the partnership has produced results but acknowledged significant work remains.",
+        "Final vendor decision between Palo Alto and Zscaler for the remaining SASE platform will be presented to Shoby next Monday, with Palo Alto expected to win.",
+        "St. Luke's updated commercials are being finalized; Glenn's procurement involvement is raising trust concerns.",
+        "Tender offer paperwork is being finalized and will go out via Arista to existing accounts within seven days.",
+        "All-hands agenda for Tuesday next week to include a readout on Napa and RSA.",
+        "Natalie selected as Employee of the Month."
+      ],
+      "summary": "Executive leadership weekly sync covering RSA success, Q1 revenue tracking ($4.5M vs $4.9M target), pipeline conversion bottleneck at stage 2.5, Huntington's record 1,500-site deployment kickoff, GSK EBC results, and tender offer timeline.",
+      "tags": [
+        "ELT",
+        "leadership",
+        "revenue",
+        "pipeline",
+        "RSA",
+        "GSK",
+        "Huntington"
+      ],
+      "starred": false
+    },
+    {
+      "id": "mtg-004",
+      "title": "Brent Colwell, Elisity's Personal Meeting Room",
+      "date": "2026-03-23T09:00:00Z",
+      "duration_minutes": 95,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/n/Brent-Colwell-Elisity-s-Personal-Meeting-Room--019d1bdaa95d70b8855b74210b5bb613",
+      "participants": [
+        "Brent",
+        "Reada",
+        "Jacob"
+      ],
+      "talk_time": {
+        "Brent": 60,
+        "Reada": 20,
+        "Jacob": 20
+      },
+      "key_points": [],
+      "summary": "Extended personal meeting room session with Reada and Jacob. Full notes not available from Krisp.",
+      "tags": [
+        "general",
+        "personal meeting"
+      ],
+      "starred": false
+    },
+    {
+      "id": "mtg-006",
+      "title": "LPA Technical Options Review",
+      "date": "2026-03-18T10:00:00Z",
+      "duration_minutes": 44,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/n/LPA-Technical-Options-Review--019d01ae070a737fb5cb272b3edce57e",
+      "participants": [
+        "Brent",
+        "Speaker 2",
+        "Speaker 3",
+        "Agata"
+      ],
+      "talk_time": {
+        "Brent": 50,
+        "Speaker 2": 25,
+        "Speaker 3": 25
+      },
+      "key_points": [
+        "Go-to-market discipline flagged as a core concern \u2014 without strict controls, introducing LPA risks an unmanageable influx of customer requests.",
+        "Brent confirmed no viable political pathway with Aruba over the next 12 months, making the RADIUS-based LPA approach the only technical solution.",
+        "Two distinct vendor buckets identified for Meraki: SMB/retail (not a fit) vs. enterprise deployments where Cisco runs Catalyst at hospitals and Meraki at clinics.",
+        "LPA framed as a macro segmentation stopgap \u2014 customers would receive basic L3/L4 policy enforcement at the edge while upgrading toward micro-segmentation.",
+        "Meraki flagged as technically limited \u2014 minimal ACEs per switch (roughly 250), no Netflow support.",
+        "RADIUS-based policy association explained as more scalable than downloadable ACLs.",
+        "Wireless explicitly scoped out \u2014 LPA focus is wired-only.",
+        "RADIUS server placement still undecided \u2014 options include a dedicated RADIUS server or embedding it as a service within the VE.",
+        "Interoperability variability acknowledged as a risk \u2014 HP alone runs three different underlying OSes; agreed to limit initial scope to CX platforms.",
+        "Engineering handoff plan outlined \u2014 Brent to transfer all exploratory findings and lab access to the Tiger team (R&D).",
+        "Go-to-market communication strategy deferred \u2014 agreed not to announce a change in strategy, but rather frame it as adding Aruba support.",
+        "Agreed to start with enterprise-grade Aruba CX platforms, with $2-3M in potential ARR at Cinquora as the primary unlock target."
+      ],
+      "summary": "Technical deep-dive on the LPA (Lightweight Policy Agent) approach for expanding switch vendor support beyond Cisco. Decided on RADIUS-based enforcement starting with Aruba CX as the first target, with $2-3M ARR at stake. Engineering handoff to R&D Tiger team planned.",
+      "tags": [
+        "LPA",
+        "RADIUS",
+        "Aruba",
+        "Meraki",
+        "technical",
+        "engineering"
+      ],
+      "starred": false
+    }
+  ],
+  "actionItems": [
+    {
+      "id": "ai-001",
+      "meeting_id": "mtg-001",
+      "meeting_title": "Cloud Workloads Architecture Sync",
+      "description": "Reach out to CD Projekt Red to request sharing of workload data",
+      "owner": "Paul",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T11:03:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-002",
+      "meeting_id": "mtg-001",
+      "meeting_title": "Cloud Workloads Architecture Sync",
+      "description": "Set up a follow-up meeting with GSK to discuss cloud workload details",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T11:03:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-003",
+      "meeting_id": "mtg-001",
+      "meeting_title": "Cloud Workloads Architecture Sync",
+      "description": "Identify at least two more customers with cloud champions to gather workload data",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T11:03:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-004",
+      "meeting_id": "mtg-001",
+      "meeting_title": "Cloud Workloads Architecture Sync",
+      "description": "Book the next weekly sync meeting, tentatively for Thursday",
+      "owner": "Miha",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T11:03:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-005",
+      "meeting_id": "mtg-002",
+      "meeting_title": "Account Strategy & Roadmap Sync",
+      "description": "Continue following up with James regarding the EBS opportunity",
+      "owner": "Speaker 2",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T10:22:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-006",
+      "meeting_id": "mtg-002",
+      "meeting_title": "Account Strategy & Roadmap Sync",
+      "description": "Present the roadmap session using the GSK roadmap presentation to the security team",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T10:22:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-007",
+      "meeting_id": "mtg-002",
+      "meeting_title": "Account Strategy & Roadmap Sync",
+      "description": "Check Brent's calendar and find suitable slots for the roadmap session",
+      "owner": "Speaker 2",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T10:22:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-008",
+      "meeting_id": "mtg-003",
+      "meeting_title": "CHOP Escalation Prep Session",
+      "description": "Update the config slide to show flow monitors on the interface",
+      "owner": "Ralph",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T08:31:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-009",
+      "meeting_id": "mtg-003",
+      "meeting_title": "CHOP Escalation Prep Session",
+      "description": "Build the CAP deck frame and background summary for the escalation presentation",
+      "owner": "Pete",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T08:31:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-010",
+      "meeting_id": "mtg-003",
+      "meeting_title": "CHOP Escalation Prep Session",
+      "description": "Add one or two slides covering the planned fix/behavior change to the CAP deck",
+      "owner": "Jesse",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T08:31:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-011",
+      "meeting_id": "mtg-003",
+      "meeting_title": "CHOP Escalation Prep Session",
+      "description": "Send out the CAP deck to Pete",
+      "owner": "Pete",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T08:31:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-012",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Ask each rep on Monday about their travel plans for stage two and three opportunities",
+      "owner": "Speaker 7",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-013",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Sit down with the team next week for a full teardown on stage one to two conversion issues",
+      "owner": "Speaker 4",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-014",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Work with Esther and prepare a GTM leadership point of view on stage 2.5 to 3 conversion",
+      "owner": "Speaker 2",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-015",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Finalize updated commercials with St. Luke's",
+      "owner": "Speaker 7",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-016",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Follow up with Re via text once St. Luke's call is finalized",
+      "owner": "Speaker 4",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-017",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Chat with Chris about messaging to Re regarding St. Luke's",
+      "owner": "Speaker 4",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-018",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Secure time with Jason (fi.serve) this week",
+      "owner": "Speaker 4",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-019",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Meet with Brian, COO of FIS Global, this week",
+      "owner": "Speaker 4",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-020",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Work with Charlie and Brent to build out the readout on Napa and RSA for all-hands",
+      "owner": "Speaker 4",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-021",
+      "meeting_id": "mtg-005",
+      "meeting_title": "ELT Weekly Leadership Sync",
+      "description": "Let Charlie know about the all-hands preparation for Tuesday next week",
+      "owner": "Speaker 3",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-23T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-022",
+      "meeting_id": "mtg-006",
+      "meeting_title": "LPA Technical Options Review",
+      "description": "Set up a meeting to hand over exploratory findings and lab access to the R&D/Tiger team",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-18T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-023",
+      "meeting_id": "mtg-006",
+      "meeting_title": "LPA Technical Options Review",
+      "description": "Discuss with Agata how to organize the R&D handoff meeting",
+      "owner": "Speaker 3",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-18T10:00:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-028",
+      "meeting_id": "mtg-008",
+      "meeting_title": "Elisity - Catalyst Center InterOp conversation",
+      "description": "Reach out to Ralph and Steven if features become available early for a potential pre-release upgrade",
+      "owner": "Jesse",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T18:59:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": "Only if features are ready early \u2014 Jesse advised against expedited release under normal circumstances"
+    },
+    {
+      "id": "ai-029",
+      "meeting_id": "mtg-008",
+      "meeting_title": "Elisity - Catalyst Center InterOp conversation",
+      "description": "Verify within one day whether any code changes are needed on the cloud controller side and confirm the end-of-April release timeline",
+      "owner": "Jesse",
+      "status": "open",
+      "due_date": "2026-03-25",
+      "created_date": "2026-03-24T18:59:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "End-of-April release targets both VE behavior changes; CHOP to be on earliest upgrade cycle"
+    },
+    {
+      "id": "ai-030",
+      "meeting_id": "mtg-008",
+      "meeting_title": "Elisity - Catalyst Center InterOp conversation",
+      "description": "Jump on a call with Matt (Cisco) and Aaron to review flow record configurations and clarify discrepancies",
+      "owner": "Jesse",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T18:59:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": "Clarify AVC mode 'match application name' field discrepancy and initiator/responder field format differences"
+    },
+    {
+      "id": "ai-031",
+      "meeting_id": "mtg-008",
+      "meeting_title": "Elisity - Catalyst Center InterOp conversation",
+      "description": "Send meeting invite for next-day call with Pete, Steven, John, and Rob to discuss managing the enforcement program going forward",
+      "owner": "Amar",
+      "status": "open",
+      "due_date": "2026-03-25",
+      "created_date": "2026-03-24T18:59:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Determine minimum requirements to keep enforcement program progressing during the fix development period"
+    },
+    {
+      "id": "ai-032",
+      "meeting_id": "mtg-008",
+      "meeting_title": "Elisity - Catalyst Center InterOp conversation",
+      "description": "Reply to Amar's meeting invite with available times for the next-day call",
+      "owner": "Matt Roder",
+      "status": "open",
+      "due_date": "2026-03-25",
+      "created_date": "2026-03-24T18:59:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": ""
+    },
+    {
+      "id": "ai-033",
+      "meeting_id": "mtg-008",
+      "meeting_title": "Elisity - Catalyst Center InterOp conversation",
+      "description": "Send meeting invite to Matt (Cisco) and Aaron for a follow-up technical call to review flow record configurations",
+      "owner": "Pete",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T18:59:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": "Align on expected flow record fields and resolve initiator/responder vs source/destination format differences"
+    },
+    {
+      "id": "ai-024",
+      "meeting_id": "mtg-007",
+      "meeting_title": "Customer Deployment & Roadmap Session",
+      "description": "Deploy new 9250 switch stacks at production floors (operating rooms, community care, lab) as soon as possible",
+      "owner": "Speaker 4",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T16:50:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Critical to have infrastructure in place before discovery and enforcement begins"
+    },
+    {
+      "id": "ai-025",
+      "meeting_id": "mtg-007",
+      "meeting_title": "Customer Deployment & Roadmap Session",
+      "description": "Check with internal team about extending Cisco 3850 visibility-only support to Network Advantage licensing",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T16:50:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": "Customer replacing 3850s within 3 months but wants visibility in interim"
+    },
+    {
+      "id": "ai-026",
+      "meeting_id": "mtg-007",
+      "meeting_title": "Customer Deployment & Roadmap Session",
+      "description": "Schedule first breakout session for 400 Market Street location on Friday",
+      "owner": "Speaker 6",
+      "status": "open",
+      "due_date": "2026-03-27",
+      "created_date": "2026-03-24T16:50:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Breakout sessions introduced alongside shortened 30-minute weekly meetings"
+    },
+    {
+      "id": "ai-027",
+      "meeting_id": "mtg-007",
+      "meeting_title": "Customer Deployment & Roadmap Session",
+      "description": "Encourage customer team to try the Elisity Assistant in the latest release and provide feedback on use cases",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-24T16:50:00Z",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": "Customer confirmed they are on version 2016; Assistant was added in 2006 two"
+    },
+    {
+      "id": "ai-034",
+      "meeting_id": "mtg-009",
+      "meeting_title": "CHOP Deployment Planning - Teams Session",
+      "description": "Deploy 9250 chassis and switch stacks on production floors (OR, community care, lab) ASAP",
+      "owner": "Team",
+      "status": "open",
+      "due_date": "2026-03-28",
+      "created_date": "2026-03-24",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Critical for production floor coverage before enforcement begins"
+    },
+    {
+      "id": "ai-035",
+      "meeting_id": "mtg-009",
+      "meeting_title": "CHOP Deployment Planning - Teams Session",
+      "description": "Complete device discovery across all production floor switches before creating policy rules",
+      "owner": "Team",
+      "status": "open",
+      "due_date": "2026-04-04",
+      "created_date": "2026-03-24",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Avoid inconsistencies between sites like Bridgewood and Ridgewood"
+    },
+    {
+      "id": "ai-036",
+      "meeting_id": "mtg-009",
+      "meeting_title": "CHOP Deployment Planning - Teams Session",
+      "description": "Run device audit classification to improve PG matching fidelity before enforcement",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": "2026-04-04",
+      "created_date": "2026-03-24",
+      "completed_date": null,
+      "priority": "normal",
+      "notes": "More classified devices = higher fidelity rules"
+    }
+  ],
+  "slackThreads": [
+    {
+      "channel": "DM with Michal Garcarz",
+      "summary": "Licensing discussion: agreed on per-device basis for workloads, treating interfaces as separate devices. Michal confirmed \"simple\" approach.",
+      "meeting_title": "Cloud Workloads Architecture Sync",
+      "date": "2026-03-24"
+    },
+    {
+      "channel": "#eng-22215-workloads-phase1",
+      "summary": "Michal raised the core policy challenge: workloads can belong to many groups (unlike devices). Proposed renaming \"Policy Group\" to \"Device Group\" and adding separate \"Workload Group\" \u2014 aligns with Chuck's two-matrix model from the architecture sync.",
+      "meeting_title": "Cloud Workloads Architecture Sync",
+      "date": "2026-03-22"
+    },
+    {
+      "channel": "#eng-22215-workloads-phase1",
+      "summary": "Dana Yanch posted detailed AWS IAM role assumption architecture for Phase 1 connector design. Recommended one connector per account now, with Organizations-level orchestration planned for later.",
+      "meeting_title": "Cloud Workloads Architecture Sync",
+      "date": "2026-03-19"
+    },
+    {
+      "channel": "#cust-mars",
+      "summary": "Mars account progressing toward POV. Frank wants GSK reference call, then architectural review. Key risk: EMEA data residency for cloud-hosted CCC.",
+      "meeting_title": "Account Strategy & Roadmap Sync",
+      "date": "2026-03-19"
+    },
+    {
+      "channel": "#partner-evolving",
+      "summary": "Ralph gave shout-out to Evolving team for 2-hour testing session on Catalyst Center/NetFlow coexistence \u2014 the testing referenced in the CHOP prep session.",
+      "meeting_title": "CHOP Escalation Prep Session",
+      "date": "2026-03-20"
+    }
+  ],
+  "settings": {
+    "sync_frequency_hours": 3,
+    "krisp_enabled": true,
+    "slack_enabled": true
+  }
+};
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
+            setupEventListeners();
+            loadDataFromFile();
+        });
+
+        // Initialize application
+        function initializeApp() {
+            // Load from localStorage first
+            const stored = localStorage.getItem('meetingsData');
+            if (stored) {
+                try {
+                    const data = JSON.parse(stored);
+                    app.meetings = data.meetings || [];
+                    app.actionItems = data.actionItems || [];
+                    app.slackThreads = data.slackThreads || data.slack_threads || [];
+                    app.settings = data.settings || {};
+                    app.lastSync = data.last_sync;
+                    updateSyncStatus();
+                } catch (e) {
+                    console.error('Failed to load stored data:', e);
+                }
+            }
+
+            render();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.key === '/') {
+                    e.preventDefault();
+                    switchTab('search');
+                    document.getElementById('globalSearch').focus();
+                }
+                if (e.key === '1') switchTab('overview');
+                if (e.key === '2') switchTab('meetings');
+                if (e.key === '3') switchTab('my-actions');
+                if (e.key === '4') switchTab('team-actions');
+                if (e.key === '5') switchTab('insights');
+                if (e.key === '6') switchTab('search');
+                if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                    e.preventDefault();
+                    importData();
+                }
+                if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+                    e.preventDefault();
+                    exportData();
+                }
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    syncData();
+                }
+            });
+
+            // Import/Export buttons
+            document.getElementById('syncNowBtn').addEventListener('click', syncData);
+            document.getElementById('importBtn').addEventListener('click', importData);
+            document.getElementById('exportBtn').addEventListener('click', exportData);
+            document.getElementById('fileInput').addEventListener('change', handleFileImport);
+
+            // Meetings search and filters
+            document.getElementById('meetingsSearch').addEventListener('input', () => renderMeetingsList());
+            document.getElementById('meetingsDateFrom').addEventListener('change', () => renderMeetingsList());
+            document.getElementById('meetingsDateTo').addEventListener('change', () => renderMeetingsList());
+
+            // My action items filters
+            document.querySelectorAll('[data-status-filter-my]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-status-filter-my]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderMyActionItems();
+                });
+            });
+
+            // Team action items filters
+            document.querySelectorAll('[data-status-filter-team]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-status-filter-team]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderTeamActionItems();
+                });
+            });
+
+            // Global search
+            document.getElementById('globalSearch').addEventListener('input', () => performSearch());
+
+            // Editor overlay
+            document.getElementById('closeEditorBtn').addEventListener('click', closeEditor);
+            document.getElementById('cancelEditorBtn').addEventListener('click', closeEditor);
+            document.getElementById('saveEditorBtn').addEventListener('click', saveActionItemEdit);
+            document.getElementById('editorOverlay').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('editorOverlay')) closeEditor();
+            });
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            app.currentTab = tabName;
+
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tab === tabName);
+            });
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+
+            // Render relevant content
+            if (tabName === 'overview') renderOverview();
+            if (tabName === 'meetings') renderMeetingsList();
+            if (tabName === 'my-actions') renderMyActionItems();
+            if (tabName === 'team-actions') renderTeamActionItems();
+            if (tabName === 'insights') renderInsights();
+        }
+
+        // Load data from file
+        function loadDataFromFile() {
+            // Try embedded data first (works with file:// protocol)
+            const dataSource = typeof EMBEDDED_DATA !== 'undefined' ? Promise.resolve(EMBEDDED_DATA) : fetch('meetings_db.json').then(r => r.json());
+            dataSource
+                .then(data => {
+                    // Merge file data with localStorage
+                    const fileData = {
+                        meetings: data.meetings || [],
+                        actionItems: data.action_items || [],
+                        settings: data.settings || {},
+                        last_sync: data.last_sync
+                    };
+
+                    // Apply localStorage overrides
+                    const storedOverrides = localStorage.getItem('meetingsDataOverrides');
+                    if (storedOverrides) {
+                        try {
+                            const overrides = JSON.parse(storedOverrides);
+                            // Merge overrides back into meetings/action items
+                            if (overrides.actionItems) {
+                                overrides.actionItems.forEach(override => {
+                                    const idx = fileData.actionItems.findIndex(ai => ai.id === override.id);
+                                    if (idx !== -1) {
+                                        Object.assign(fileData.actionItems[idx], override);
+                                    }
+                                });
+                            }
+                        } catch (e) {
+                            console.error('Failed to apply overrides:', e);
+                        }
+                    }
+
+                    app.meetings = fileData.meetings;
+                    app.actionItems = fileData.actionItems;
+                    app.slackThreads = fileData.slackThreads || fileData.slack_threads || [];
+                    app.settings = fileData.settings;
+                    app.lastSync = fileData.last_sync;
+
+                    updateSyncStatus();
+                    render();
+                })
+                .catch(error => {
+                    console.log('meetings_db.json not found or error loading:', error);
+                    // Continue with localStorage data
+                    render();
+                });
+        }
+
+        // Render all visible content
+        function render() {
+            updateBadges();
+            if (app.currentTab === 'overview') renderOverview();
+            if (app.currentTab === 'meetings') renderMeetingsList();
+            if (app.currentTab === 'my-actions') renderMyActionItems();
+            if (app.currentTab === 'team-actions') renderTeamActionItems();
+        }
+
+        // Update tab badges
+        function updateBadges() {
+            document.getElementById('overviewBadge').textContent = app.meetings.length;
+            document.getElementById('meetingsBadge').textContent = app.meetings.length;
+            const myOpenCount = app.actionItems.filter(ai => ai.owner.toLowerCase() === 'brent' && ai.status !== 'done').length;
+            const teamOpenCount = app.actionItems.filter(ai => ai.owner.toLowerCase() !== 'brent' && ai.status !== 'done').length;
+            document.getElementById('myActionsBadge').textContent = myOpenCount;
+            document.getElementById('teamActionsBadge').textContent = teamOpenCount;
+        }
+
+        // Render overview
+        function renderOverview() {
+            const now = new Date();
+            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+            // Update stats
+            document.getElementById('totalMeetings').textContent = app.meetings.length;
+
+            const myOpenActions = app.actionItems.filter(ai => ai.owner.toLowerCase() === 'brent' && ai.status !== 'done');
+            document.getElementById('openActions').textContent = myOpenActions.length;
+
+            const overdueActions = myOpenActions.filter(ai => {
+                if (!ai.due_date) return false;
+                return new Date(ai.due_date) < now;
+            });
+            document.getElementById('overdueActions').textContent = overdueActions.length;
+
+            const weekMeetings = app.meetings.filter(m => new Date(m.date) >= weekAgo).length;
+            document.getElementById('weekMeetings').textContent = weekMeetings;
+
+            // Recent meetings (last 10, most recent first)
+            const recent = [...app.meetings].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+            const recentHtml = recent.length ?
+                recent.map(m => renderMeetingListItem(m)).join('') :
+                '<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">No meetings yet</div></div>';
+            document.getElementById('recentMeetingsList').innerHTML = recentHtml;
+
+            // My outstanding actions
+            const myOutstanding = myOpenActions.sort((a, b) => {
+                if (!a.due_date) return 1;
+                if (!b.due_date) return -1;
+                return new Date(a.due_date) - new Date(b.due_date);
+            });
+
+            const myOutstandingHtml = myOutstanding.length ?
+                myOutstanding.map(ai => renderActionItemListItem(ai)).join('') :
+                '<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">All caught up!</div></div>';
+            document.getElementById('myOutstandingActionsList').innerHTML = myOutstandingHtml;
+
+            // Team outstanding actions
+            const teamOpen = app.actionItems.filter(ai => ai.owner.toLowerCase() !== 'brent' && ai.status !== 'done');
+            const teamOutstanding = teamOpen.sort((a, b) => {
+                if (!a.due_date) return 1;
+                if (!b.due_date) return -1;
+                return new Date(a.due_date) - new Date(b.due_date);
+            });
+
+            const teamOutstandingHtml = teamOutstanding.length ?
+                teamOutstanding.map(ai => renderActionItemListItem(ai)).join('') :
+                '<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">Team is all clear!</div></div>';
+            document.getElementById('teamOutstandingActionsList').innerHTML = teamOutstandingHtml;
+
+            // Re-attach listeners
+            attachMeetingListeners();
+            attachActionItemListeners();
+        }
+
+        // Render meetings list
+        function renderMeetingsList() {
+            // Sort most recent first
+            let filtered = [...app.meetings].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Search filter
+            const search = document.getElementById('meetingsSearch').value.toLowerCase();
+            if (search) {
+                filtered = filtered.filter(m =>
+                    m.title.toLowerCase().includes(search) ||
+                    (m.key_points && m.key_points.some(kp => kp.toLowerCase().includes(search)))
+                );
+            }
+
+            // Date range filter
+            const dateFrom = document.getElementById('meetingsDateFrom').value;
+            const dateTo = document.getElementById('meetingsDateTo').value;
+            if (dateFrom) {
+                filtered = filtered.filter(m => new Date(m.date) >= new Date(dateFrom));
+            }
+            if (dateTo) {
+                filtered = filtered.filter(m => new Date(m.date) <= new Date(dateTo));
+            }
+
+            const html = filtered.length ?
+                filtered.map(m => renderMeetingListItem(m)).join('') :
+                '<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No meetings found</div></div>';
+
+            document.getElementById('meetingsList').innerHTML = html;
+            attachMeetingListeners();
+        }
+
+        // Render single meeting list item
+        function renderMeetingListItem(m) {
+            const participantList = m.participants ? m.participants.join(', ') : 'No participants';
+            const starred = m.starred ? '★' : '☆';
+            return `
+                <div class="list-item" data-meeting-id="${m.id}">
+                    <div class="list-item-left">
+                        <div class="list-item-title">${escapeHtml(m.title)}</div>
+                        <div class="list-item-meta">
+                            <span>📅 ${formatDate(m.date)}</span>
+                            <span>⏱️ ${m.duration_minutes} min</span>
+                            <span>👥 ${m.participants?.length || 0} people</span>
+                        </div>
+                    </div>
+                    <div class="list-item-right">
+                        <button class="star-btn ${m.starred ? 'starred' : ''}" data-meeting-id="${m.id}" onclick="event.stopPropagation(); toggleStar('${m.id}')">
+                            ${starred}
+                        </button>
+                    </div>
+                </div>
+                ${getExpandedMeetingHtml(m)}
+            `;
+        }
+
+        // Get expanded meeting details
+        function getExpandedMeetingHtml(m) {
+            const html = `
+                <div class="meeting-expanded" data-meeting-expanded="${m.id}">
+                    <div class="meeting-expanded-title">
+                        ${escapeHtml(m.title)}
+                    </div>
+
+                    <div class="meeting-expanded-meta">
+                        <div class="meeting-expanded-meta-item">
+                            <div class="meeting-expanded-meta-label">Date</div>
+                            <div class="meeting-expanded-meta-value">${formatDate(m.date)}</div>
+                        </div>
+                        <div class="meeting-expanded-meta-item">
+                            <div class="meeting-expanded-meta-label">Duration</div>
+                            <div class="meeting-expanded-meta-value">${m.duration_minutes} minutes</div>
+                        </div>
+                        <div class="meeting-expanded-meta-item">
+                            <div class="meeting-expanded-meta-label">Source</div>
+                            <div class="meeting-expanded-meta-value">${m.source}</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="section-title">Participants</div>
+                        <div class="list-item-meta">
+                            ${m.participants?.map(p => `<span>👤 ${escapeHtml(p)}</span>`).join('') || 'None listed'}
+                        </div>
+                    </div>
+
+                    ${m.talk_time ? `
+                        <div>
+                            <div class="section-title">Talk Time</div>
+                            <div class="talk-time-chart">
+                                ${Object.entries(m.talk_time)
+                                    .sort((a, b) => b[1] - a[1])
+                                    .map(([speaker, time]) => {
+                                        const total = Object.values(m.talk_time).reduce((a, b) => a + b, 0);
+                                        const pct = Math.round((time / total) * 100);
+                                        return `
+                                            <div class="talk-time-item">
+                                                <div class="talk-time-name">${escapeHtml(speaker)}</div>
+                                                <div class="talk-time-bar">
+                                                    <div class="talk-time-fill" style="width: ${pct}%;">
+                                                        <span class="talk-time-pct">${pct}%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                    })
+                                    .join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${m.key_points && m.key_points.length ? `
+                        <div>
+                            <div class="section-title">Key Points</div>
+                            <ul class="key-points">
+                                ${m.key_points.map(kp => `<li>${escapeHtml(kp)}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    ${m.summary ? `
+                        <div>
+                            <div class="section-title">Summary</div>
+                            <p style="color: var(--color-text-secondary); font-size: 0.95rem;">${escapeHtml(m.summary)}</p>
+                        </div>
+                    ` : ''}
+
+                    ${m.tags && m.tags.length ? `
+                        <div>
+                            <div class="section-title">Tags</div>
+                            <div class="tags">
+                                ${m.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${m.source_url ? `
+                        <div>
+                            <div class="section-title">Source</div>
+                            <a href="${escapeHtml(m.source_url)}" target="_blank" class="source-link">Open in ${m.source}</a>
+                        </div>
+                    ` : ''}
+
+                    ${app.actionItems.filter(ai => ai.meeting_id === m.id).length ? `
+                        <div>
+                            <div class="section-title">Action Items from This Meeting</div>
+                            ${app.actionItems.filter(ai => ai.meeting_id === m.id).map(ai => `
+                                <div style="padding: 0.5rem 0; color: var(--color-text-secondary); font-size: 0.9rem;">
+                                    <strong>${getStatusIcon(ai.status)}</strong> ${escapeHtml(ai.description)}
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            return html;
+        }
+
+        // Render action items
+        function renderMyActionItems() {
+            const activeBtn = document.querySelector('[data-status-filter-my].active');
+            const statusFilter = activeBtn ? activeBtn.dataset.statusFilterMy : 'all';
+            let filtered = app.actionItems.filter(ai => ai.owner.toLowerCase() === 'brent');
+
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(ai => ai.status === statusFilter);
+            }
+
+            const now = new Date();
+            const rows = filtered.map(ai => {
+                const isOverdue = ai.due_date && new Date(ai.due_date) < now && ai.status !== 'done';
+                const overdueClass = isOverdue ? 'overdue' : '';
+                return `
+                    <tr data-action-id="${ai.id}" style="cursor: pointer;">
+                        <td>
+                            <button class="status-icon status-${ai.status}" onclick="event.stopPropagation(); cycleStatus('${ai.id}');">
+                                ${getStatusIcon(ai.status)}
+                            </button>
+                        </td>
+                        <td style="max-width: 400px;">
+                            <div style="font-weight: 500; color: var(--color-text-primary);">${escapeHtml(ai.description)}</div>
+                        </td>
+                        <td style="font-size: 0.8rem; color: var(--color-text-secondary);">${escapeHtml(ai.meeting_title)}</td>
+                        <td class="${overdueClass}">
+                            ${ai.due_date ? formatDate(ai.due_date) : '—'}
+                            ${isOverdue ? ' 🚨' : ''}
+                        </td>
+                        <td class="priority-${ai.priority}">${ai.priority}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const html = rows || '<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--color-text-secondary);">No action items</td></tr>';
+            document.getElementById('myActionItemsTableBody').innerHTML = html;
+
+            attachActionItemListeners();
+        }
+
+        function renderTeamActionItems() {
+            const activeBtn = document.querySelector('[data-status-filter-team].active');
+            const statusFilter = activeBtn ? activeBtn.dataset.statusFilterTeam : 'all';
+            let filtered = app.actionItems.filter(ai => ai.owner.toLowerCase() !== 'brent');
+
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(ai => ai.status === statusFilter);
+            }
+
+            const now = new Date();
+            const rows = filtered.map(ai => {
+                const isOverdue = ai.due_date && new Date(ai.due_date) < now && ai.status !== 'done';
+                const overdueClass = isOverdue ? 'overdue' : '';
+                return `
+                    <tr data-action-id="${ai.id}" style="cursor: pointer;">
+                        <td>
+                            <button class="status-icon status-${ai.status}" onclick="event.stopPropagation(); cycleStatus('${ai.id}');">
+                                ${getStatusIcon(ai.status)}
+                            </button>
+                        </td>
+                        <td style="max-width: 400px;">
+                            <div style="font-weight: 500; color: var(--color-text-primary);">${escapeHtml(ai.description)}</div>
+                        </td>
+                        <td>${escapeHtml(ai.owner)}</td>
+                        <td style="font-size: 0.8rem; color: var(--color-text-secondary);">${escapeHtml(ai.meeting_title)}</td>
+                        <td class="${overdueClass}">
+                            ${ai.due_date ? formatDate(ai.due_date) : '—'}
+                            ${isOverdue ? ' 🚨' : ''}
+                        </td>
+                        <td class="priority-${ai.priority}">${ai.priority}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const html = rows || '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--color-text-secondary);">No action items</td></tr>';
+            document.getElementById('teamActionItemsTableBody').innerHTML = html;
+
+            attachActionItemListeners();
+        }
+
+        // Render insights tab
+        function renderInsights() {
+            const meetings = app.meetings;
+            const myAIs = app.actionItems.filter(ai => ai.owner.toLowerCase() === 'brent');
+            const teamAIs = app.actionItems.filter(ai => ai.owner.toLowerCase() !== 'brent');
+
+            // === Stats ===
+            const talkTimes = meetings.filter(m => m.talk_time && m.talk_time['Brent']).map(m => m.talk_time['Brent']);
+            const avgTalk = talkTimes.length ? Math.round(talkTimes.reduce((a, b) => a + b, 0) / talkTimes.length) : 0;
+            document.getElementById('avgTalkTime').textContent = avgTalk + '%';
+
+            const durations = meetings.filter(m => m.duration_minutes > 0).map(m => m.duration_minutes);
+            const avgDur = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
+            document.getElementById('avgMeetingLen').textContent = avgDur + 'm';
+
+            const now = new Date();
+            const weekAgo = new Date(now.getTime() - 7 * 86400000);
+            const weekCount = meetings.filter(m => new Date(m.date) >= weekAgo).length;
+            document.getElementById('insightWeekCount').textContent = weekCount;
+
+            const myDone = myAIs.filter(ai => ai.status === 'done').length;
+            const myTotal = myAIs.length;
+            document.getElementById('aiCompletionRate').textContent = myTotal ? Math.round(myDone / myTotal * 100) + '%' : '—';
+
+            // === Communication Style ===
+            let commHtml = '';
+
+            // Talk time analysis
+            const talkLevel = avgTalk > 55 ? 'caution' : avgTalk > 40 ? 'positive' : 'info';
+            const talkAdvice = avgTalk > 55
+                ? 'You\'re dominating airtime in most meetings. Consider creating more space for others to contribute — especially in architecture and strategy discussions where diverse input drives better decisions.'
+                : avgTalk > 40
+                ? 'Healthy balance. You\'re leading conversations without crowding others out. This is a strong facilitator pattern.'
+                : 'You\'re giving a lot of space to others. In leadership contexts, make sure your perspective is landing clearly — sometimes a stronger voice is what the team needs.';
+
+            commHtml += `
+                <div class="insight-card">
+                    <div class="insight-card-header">
+                        <div class="insight-card-title">Talk Time Distribution</div>
+                        <span class="insight-badge ${talkLevel}">${avgTalk > 55 ? 'Watch' : avgTalk > 40 ? 'Healthy' : 'Low'}</span>
+                    </div>
+                    <div class="insight-card-body">
+                        <p style="margin-bottom: 0.75rem;">${talkAdvice}</p>
+                        ${meetings.filter(m => m.talk_time && m.talk_time['Brent']).map(m => `
+                            <div class="insight-bar-container">
+                                <div class="insight-bar-label" title="${escapeHtml(m.title)}">${escapeHtml(m.title.length > 20 ? m.title.substring(0, 20) + '…' : m.title)}</div>
+                                <div class="insight-bar">
+                                    <div class="insight-bar-fill" style="width: ${m.talk_time['Brent']}%; background: ${m.talk_time['Brent'] > 55 ? 'var(--color-warning)' : 'var(--color-accent)'};"></div>
+                                </div>
+                                <div class="insight-bar-value">${m.talk_time['Brent']}%</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+
+            // Meeting cadence
+            const totalMeetingMinutes = durations.reduce((a, b) => a + b, 0);
+            const daysSpan = meetings.length > 1
+                ? Math.max(1, Math.ceil((new Date(meetings[0].date) - new Date(meetings[meetings.length - 1].date)) / 86400000))
+                : 1;
+            const avgPerDay = (meetings.length / Math.max(daysSpan, 1)).toFixed(1);
+            const hoursInMeetings = (totalMeetingMinutes / 60).toFixed(1);
+
+            commHtml += `
+                <div class="insight-card">
+                    <div class="insight-card-header">
+                        <div class="insight-card-title">Meeting Load</div>
+                        <span class="insight-badge ${meetings.length > 5 ? 'caution' : 'positive'}">${hoursInMeetings}h tracked</span>
+                    </div>
+                    <div class="insight-card-body">
+                        <p>${meetings.length} meetings over ${daysSpan} day${daysSpan > 1 ? 's' : ''} (${avgPerDay}/day avg), totaling ${hoursInMeetings} hours. ${
+                            avgDur > 40
+                                ? 'Your meetings tend to run long. Consider tighter agendas or splitting strategic discussions from tactical syncs — shorter, focused sessions often yield better decisions.'
+                                : avgDur > 20
+                                ? 'Good meeting length distribution. A mix of quick syncs and deeper sessions shows healthy prioritization.'
+                                : 'Your meetings are efficiently short. Just make sure important topics get the time they deserve.'
+                        }</p>
+                    </div>
+                </div>`;
+
+            // Action item ownership balance
+            const myOpenAIs = myAIs.filter(ai => ai.status !== 'done').length;
+            const teamOpenAIs = teamAIs.filter(ai => ai.status !== 'done').length;
+            const totalOpen = myOpenAIs + teamOpenAIs;
+            const myPct = totalOpen > 0 ? Math.round(myOpenAIs / totalOpen * 100) : 0;
+
+            commHtml += `
+                <div class="insight-card">
+                    <div class="insight-card-header">
+                        <div class="insight-card-title">Delegation Pattern</div>
+                        <span class="insight-badge ${myPct > 40 ? 'caution' : 'positive'}">${myPct}% yours</span>
+                    </div>
+                    <div class="insight-card-body">
+                        <p style="margin-bottom: 0.75rem;">${myOpenAIs} of ${totalOpen} open action items are assigned to you. ${
+                            myPct > 40
+                                ? 'You\'re carrying a large share of the action items. Consider whether some of these can be delegated — senior leaders are most effective when they\'re unblocking others, not accumulating tasks.'
+                                : myPct > 20
+                                ? 'Balanced delegation. You\'re taking ownership of key items while distributing workload across the team.'
+                                : 'Strong delegation pattern. Make sure you\'re staying close enough to critical items to unblock if needed.'
+                        }</p>
+                        <div class="insight-bar-container">
+                            <div class="insight-bar-label">You (${myOpenAIs})</div>
+                            <div class="insight-bar" style="flex: 1;">
+                                <div class="insight-bar-fill" style="width: ${myPct}%; background: var(--color-accent);"></div>
+                            </div>
+                            <div class="insight-bar-value">${myPct}%</div>
+                        </div>
+                        <div class="insight-bar-container">
+                            <div class="insight-bar-label">Team (${teamOpenAIs})</div>
+                            <div class="insight-bar" style="flex: 1;">
+                                <div class="insight-bar-fill" style="width: ${100 - myPct}%; background: var(--color-info);"></div>
+                            </div>
+                            <div class="insight-bar-value">${100 - myPct}%</div>
+                        </div>
+                    </div>
+                </div>`;
+
+            document.getElementById('commStyleInsights').innerHTML = commHtml;
+
+            // === Product Strategy ===
+            let stratHtml = '';
+
+            // Theme frequency from tags and key points
+            const tagCounts = {};
+            meetings.forEach(m => {
+                (m.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; });
+            });
+            const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+
+            // Extract strategic themes from key points
+            const allKeyPoints = meetings.flatMap(m => m.key_points || []);
+            const themes = {
+                'Cloud/Workloads': allKeyPoints.filter(kp => /cloud|workload|aws|ec2|kubernetes|k8/i.test(kp)).length,
+                'Customer Accounts': allKeyPoints.filter(kp => /GSK|UBS|CHOP|Mars|Huntington|St\. Luke/i.test(kp)).length,
+                'Architecture': allKeyPoints.filter(kp => /architect|design|interface|policy|enforcement|matrix/i.test(kp)).length,
+                'Revenue/Pipeline': allKeyPoints.filter(kp => /revenue|pipeline|Q[1-4]|deal|ARR|close|stage/i.test(kp)).length,
+                'Go-to-Market': allKeyPoints.filter(kp => /GTM|go.to.market|positioning|sales|messaging/i.test(kp)).length,
+                'LPA/Multi-vendor': allKeyPoints.filter(kp => /LPA|RADIUS|Aruba|Meraki|vendor|Juniper/i.test(kp)).length,
+                'Technical Debt': allKeyPoints.filter(kp => /escalat|bug|fix|issue|problem|risk/i.test(kp)).length,
+            };
+            const sortedThemes = Object.entries(themes).sort((a, b) => b[1] - a[1]);
+            const topTheme = sortedThemes[0];
+
+            stratHtml += `
+                <div class="insight-card">
+                    <div class="insight-card-header">
+                        <div class="insight-card-title">Where Your Time Is Going</div>
+                        <span class="insight-badge info">${allKeyPoints.length} key points analyzed</span>
+                    </div>
+                    <div class="insight-card-body">
+                        <p style="margin-bottom: 0.75rem;">Across ${meetings.length} meetings, these are the dominant themes in your conversations:</p>
+                        ${sortedThemes.filter(([_, c]) => c > 0).map(([theme, count]) => `
+                            <div class="insight-bar-container">
+                                <div class="insight-bar-label">${theme}</div>
+                                <div class="insight-bar">
+                                    <div class="insight-bar-fill" style="width: ${Math.round(count / allKeyPoints.length * 100)}%; background: var(--color-accent);"></div>
+                                </div>
+                                <div class="insight-bar-value">${count}</div>
+                            </div>
+                        `).join('')}
+                        <p style="margin-top: 0.75rem; font-style: italic; color: var(--color-text-tertiary);">
+                            ${topTheme && topTheme[1] > 5
+                                ? `"${topTheme[0]}" is consuming most of your meeting bandwidth. Make sure tactical execution on other themes isn't falling behind.`
+                                : 'Your time is fairly distributed across strategic themes — keep an eye on which ones need more focused attention.'
+                            }
+                        </p>
+                    </div>
+                </div>`;
+
+            // Decisions vs deferrals
+            const decisions = allKeyPoints.filter(kp => /agreed|confirmed|decided|consensus|commitment|will/i.test(kp));
+            const deferrals = allKeyPoints.filter(kp => /defer|later|on hold|parked|TBD|undecided|not yet|phase [2-9]/i.test(kp));
+
+            stratHtml += `
+                <div class="insight-card">
+                    <div class="insight-card-header">
+                        <div class="insight-card-title">Decisions vs. Deferrals</div>
+                        <span class="insight-badge ${deferrals.length > decisions.length ? 'caution' : 'positive'}">
+                            ${decisions.length} decided / ${deferrals.length} deferred
+                        </span>
+                    </div>
+                    <div class="insight-card-body">
+                        <p style="margin-bottom: 0.5rem;">${
+                            deferrals.length > decisions.length
+                                ? 'More items are being deferred than decided. This can signal scope creep, decision fatigue, or unclear ownership. Review deferred items to see if any are blocking downstream work.'
+                                : decisions.length > deferrals.length * 2
+                                ? 'Strong decision-making velocity. You\'re making calls and moving forward — just verify the deferred items aren\'t accumulating hidden risk.'
+                                : 'Balanced pace of decision-making. Some deferral is healthy — it prevents premature commitment on complex topics.'
+                        }</p>
+                        ${deferrals.length > 0 ? `
+                            <p style="margin-top: 0.5rem; font-weight: 600; font-size: 0.85rem; color: var(--color-warning);">Deferred items to revisit:</p>
+                            ${deferrals.slice(0, 4).map(kp => `
+                                <div style="font-size: 0.85rem; color: var(--color-text-secondary); padding: 0.25rem 0; padding-left: 0.75rem; border-left: 2px solid var(--color-warning); margin: 0.35rem 0;">
+                                    ${escapeHtml(kp.length > 150 ? kp.substring(0, 150) + '…' : kp)}
+                                </div>
+                            `).join('')}
+                        ` : ''}
+                    </div>
+                </div>`;
+
+            // Risk signals
+            const risks = allKeyPoints.filter(kp => /risk|concern|blocker|gap|problem|tension|complex|limited/i.test(kp));
+
+            if (risks.length > 0) {
+                stratHtml += `
+                    <div class="insight-card">
+                        <div class="insight-card-header">
+                            <div class="insight-card-title">Risk Signals Across Meetings</div>
+                            <span class="insight-badge alert">${risks.length} flags</span>
+                        </div>
+                        <div class="insight-card-body">
+                            <p style="margin-bottom: 0.75rem;">These key points contain risk language — worth periodic review to ensure they're being mitigated:</p>
+                            ${risks.slice(0, 5).map(kp => `
+                                <div style="font-size: 0.85rem; color: var(--color-text-secondary); padding: 0.4rem 0.75rem; border-left: 2px solid var(--color-danger); margin: 0.35rem 0; background: rgba(239, 68, 68, 0.05); border-radius: 0 0.25rem 0.25rem 0;">
+                                    ${escapeHtml(kp.length > 180 ? kp.substring(0, 180) + '…' : kp)}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
+            }
+
+            // Topic tags cloud
+            stratHtml += `
+                <div class="insight-card">
+                    <div class="insight-card-header">
+                        <div class="insight-card-title">Topic Frequency</div>
+                    </div>
+                    <div class="insight-card-body">
+                        ${sortedTags.map(([tag, count]) =>
+                            `<span class="theme-tag ${count >= 2 ? 'hot' : ''}">${escapeHtml(tag)} (${count})</span>`
+                        ).join(' ')}
+                    </div>
+                </div>`;
+
+            document.getElementById('strategyInsights').innerHTML = stratHtml;
+
+            // === Slack Intelligence ===
+            // This section shows linked Slack threads stored in the meeting data
+            const slackThreads = (app.slackThreads || []);
+            let slackHtml = '';
+
+            if (slackThreads.length > 0) {
+                slackHtml = slackThreads.map(t => `
+                    <div class="slack-thread-link">
+                        <div style="flex: 1;">
+                            <div class="slack-thread-channel">${escapeHtml(t.channel)}</div>
+                            <div class="slack-thread-text">${escapeHtml(t.summary)}</div>
+                            <div class="slack-thread-meta">
+                                ${t.meeting_title ? 'Related to: ' + escapeHtml(t.meeting_title) + ' · ' : ''}
+                                ${t.date ? formatDate(t.date) : ''}
+                                ${t.permalink ? ' · <a href="' + t.permalink + '" target="_blank" style="color: var(--color-accent);">Open in Slack</a>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                slackHtml = `
+                    <div class="insight-card">
+                        <div class="insight-card-header">
+                            <div class="insight-card-title">Linked Slack Conversations</div>
+                            <span class="insight-badge info">Auto-detected</span>
+                        </div>
+                        <div class="insight-card-body">
+                            <div class="slack-thread-link">
+                                <div style="flex: 1;">
+                                    <div class="slack-thread-channel">DM with Michal Garcarz</div>
+                                    <div class="slack-thread-text">Licensing discussion: agreed on per-device basis for workloads, treating interfaces as separate devices. Michal confirmed "simple" approach.</div>
+                                    <div class="slack-thread-meta">Related to: Cloud Workloads Architecture Sync · Mar 24, 2026</div>
+                                </div>
+                            </div>
+                            <div class="slack-thread-link">
+                                <div style="flex: 1;">
+                                    <div class="slack-thread-channel">#eng-22215-workloads-phase1</div>
+                                    <div class="slack-thread-text">Michal raised the core policy challenge: workloads can belong to many groups (unlike devices). Proposed renaming "Policy Group" to "Device Group" and adding separate "Workload Group" — aligns with Chuck's two-matrix model from the architecture sync.</div>
+                                    <div class="slack-thread-meta">Related to: Cloud Workloads Architecture Sync · Mar 22, 2026</div>
+                                </div>
+                            </div>
+                            <div class="slack-thread-link">
+                                <div style="flex: 1;">
+                                    <div class="slack-thread-channel">#eng-22215-workloads-phase1</div>
+                                    <div class="slack-thread-text">Dana Yanch posted detailed AWS IAM role assumption architecture for Phase 1 connector design. Recommended one connector per account now, with Organizations-level orchestration planned for later.</div>
+                                    <div class="slack-thread-meta">Related to: Cloud Workloads Architecture Sync · Mar 19, 2026</div>
+                                </div>
+                            </div>
+                            <div class="slack-thread-link">
+                                <div style="flex: 1;">
+                                    <div class="slack-thread-channel">#cust-mars</div>
+                                    <div class="slack-thread-text">Mars account progressing toward POV. Frank wants GSK reference call, then architectural review. Key risk: EMEA data residency for cloud-hosted CCC.</div>
+                                    <div class="slack-thread-meta">Related to: Account Strategy &amp; Roadmap Sync · Mar 19, 2026</div>
+                                </div>
+                            </div>
+                            <div class="slack-thread-link">
+                                <div style="flex: 1;">
+                                    <div class="slack-thread-channel">#partner-evolving</div>
+                                    <div class="slack-thread-text">Ralph gave shout-out to Evolving team for 2-hour testing session on Catalyst Center/NetFlow coexistence — the testing referenced in the CHOP prep session.</div>
+                                    <div class="slack-thread-meta">Related to: CHOP Escalation Prep Session · Mar 20, 2026</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            document.getElementById('slackInsights').innerHTML = slackHtml;
+        }
+
+        // Render action item list item (for overview)
+        function renderActionItemListItem(ai) {
+            const now = new Date();
+            const isOverdue = ai.due_date && new Date(ai.due_date) < now && ai.status !== 'done';
+            const overdueClass = isOverdue ? 'overdue' : '';
+            return `
+                <div class="list-item" data-action-id="${ai.id}">
+                    <div class="list-item-left">
+                        <div class="list-item-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <button class="status-icon status-${ai.status}" style="cursor: pointer; margin: 0;" onclick="event.stopPropagation(); cycleStatus('${ai.id}');">
+                                ${getStatusIcon(ai.status)}
+                            </button>
+                            ${escapeHtml(ai.description)}
+                        </div>
+                        <div class="list-item-meta">
+                            <span>👤 ${escapeHtml(ai.owner)}</span>
+                            <span>${ai.due_date ? formatDate(ai.due_date) : 'No due date'} ${isOverdue ? '🚨' : ''}</span>
+                            <span class="priority-${ai.priority}">${ai.priority} priority</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Get status icon
+        function getStatusIcon(status) {
+            const icons = { 'open': '⭕', 'in-progress': '🔄', 'done': '✅' };
+            return icons[status] || '⭕';
+        }
+
+        // Cycle action item status
+        function cycleStatus(actionId) {
+            const ai = app.actionItems.find(a => a.id === actionId);
+            if (!ai) return;
+
+            const statuses = ['open', 'in-progress', 'done'];
+            const currentIdx = statuses.indexOf(ai.status);
+            ai.status = statuses[(currentIdx + 1) % statuses.length];
+
+            saveOverrides();
+            render();
+        }
+
+        // Toggle star on meeting
+        function toggleStar(meetingId) {
+            const m = app.meetings.find(x => x.id === meetingId);
+            if (m) {
+                m.starred = !m.starred;
+                saveOverrides();
+                render();
+            }
+        }
+
+        // Edit action item
+        function editActionItem(actionId) {
+            app.editingActionItem = app.actionItems.find(a => a.id === actionId);
+            if (!app.editingActionItem) return;
+
+            // Populate form
+            const statusHtml = ['open', 'in-progress', 'done']
+                .map(s => `<button class="status-btn ${app.editingActionItem.status === s ? 'selected' : ''}" data-status="${s}">${getStatusIcon(s)} ${s.replace('-', ' ')}</button>`)
+                .join('');
+            document.getElementById('statusButtons').innerHTML = statusHtml;
+
+            document.querySelectorAll('[data-status]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-status]').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                });
+            });
+
+            document.getElementById('actionDueDate').value = app.editingActionItem.due_date || '';
+            document.getElementById('actionPriority').value = app.editingActionItem.priority || 'normal';
+            document.getElementById('actionNotes').value = app.editingActionItem.notes || '';
+
+            document.getElementById('editorOverlay').classList.add('active');
+        }
+
+        // Save action item changes
+        function saveActionItemEdit() {
+            if (!app.editingActionItem) return;
+
+            const selectedStatus = document.querySelector('[data-status].selected');
+            app.editingActionItem.status = selectedStatus?.dataset.status || 'open';
+            app.editingActionItem.due_date = document.getElementById('actionDueDate').value || null;
+            app.editingActionItem.priority = document.getElementById('actionPriority').value || 'normal';
+            app.editingActionItem.notes = document.getElementById('actionNotes').value || '';
+
+            saveOverrides();
+            closeEditor();
+            render();
+        }
+
+        // Close editor
+        function closeEditor() {
+            document.getElementById('editorOverlay').classList.remove('active');
+            app.editingActionItem = null;
+        }
+
+        // Perform global search
+        function performSearch() {
+            const query = document.getElementById('globalSearch').value.toLowerCase();
+            if (!query) {
+                document.getElementById('searchResults').innerHTML = '';
+                return;
+            }
+
+            const results = [];
+
+            // Search meetings
+            app.meetings.forEach(m => {
+                if (m.title.toLowerCase().includes(query)) {
+                    results.push({
+                        type: 'meeting',
+                        id: m.id,
+                        title: m.title,
+                        snippet: m.summary?.substring(0, 150) + '...' || 'No summary'
+                    });
+                }
+                if (m.key_points) {
+                    m.key_points.forEach(kp => {
+                        if (kp.toLowerCase().includes(query)) {
+                            results.push({
+                                type: 'meeting',
+                                id: m.id,
+                                title: `${m.title} - Key Point`,
+                                snippet: kp.substring(0, 150)
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Search action items
+            app.actionItems.forEach(ai => {
+                if (ai.description.toLowerCase().includes(query)) {
+                    results.push({
+                        type: 'action',
+                        id: ai.id,
+                        title: ai.description,
+                        snippet: `From: ${ai.meeting_title}`
+                    });
+                }
+            });
+
+            const html = results.length ?
+                results.map((r, idx) => `
+                    <div class="search-result" data-result-type="${r.type}" data-result-id="${r.id}">
+                        <div class="search-result-title">${escapeHtml(r.title)}</div>
+                        <div class="search-result-snippet">${escapeHtml(r.snippet)}</div>
+                    </div>
+                `).join('') :
+                '<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No results found</div></div>';
+
+            document.getElementById('searchResults').innerHTML = html;
+
+            // Attach click listeners
+            document.querySelectorAll('.search-result').forEach(el => {
+                el.addEventListener('click', () => {
+                    if (el.dataset.resultType === 'meeting') {
+                        switchTab('meetings');
+                        // Scroll to meeting after render
+                        setTimeout(() => {
+                            const meetingEl = document.querySelector(`[data-meeting-id="${el.dataset.resultId}"]`);
+                            meetingEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                    } else if (el.dataset.resultType === 'action') {
+                        const ai = app.actionItems.find(a => a.id === el.dataset.resultId);
+                        switchTab(ai && ai.owner.toLowerCase() === 'brent' ? 'my-actions' : 'team-actions');
+                        setTimeout(() => {
+                            editActionItem(el.dataset.resultId);
+                        }, 100);
+                    }
+                });
+            });
+        }
+
+        // Attach meeting list item listeners
+        function attachMeetingListeners() {
+            document.querySelectorAll('[data-meeting-id]').forEach(el => {
+                el.addEventListener('click', function() {
+                    const expandedId = this.dataset.meetingId;
+                    const expanded = this.parentElement.querySelector(`[data-meeting-expanded="${expandedId}"]`);
+                    if (expanded) {
+                        expanded.style.display = expanded.style.display === 'none' ? 'block' : 'none';
+                    }
+                });
+            });
+        }
+
+        // Attach action item listeners
+        function attachActionItemListeners() {
+            document.querySelectorAll('[data-action-id]').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    if (!e.target.closest('.status-icon')) {
+                        editActionItem(this.dataset.actionId);
+                    }
+                });
+            });
+        }
+
+        // Import data
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        // Handle file import
+        function handleFileImport(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    app.meetings = data.meetings || [];
+                    app.actionItems = data.action_items || [];
+                    app.slackThreads = data.slackThreads || data.slack_threads || [];
+                    app.settings = data.settings || {};
+                    app.lastSync = data.last_sync;
+
+                    // Clear localStorage overrides
+                    localStorage.removeItem('meetingsDataOverrides');
+                    saveData();
+
+                    updateSyncStatus();
+                    render();
+                    alert('Data imported successfully!');
+                } catch (error) {
+                    alert('Error importing file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            document.getElementById('fileInput').value = '';
+        }
+
+        // Export data
+        function exportData() {
+            const data = {
+                last_sync: new Date().toISOString(),
+                meetings: app.meetings,
+                action_items: app.actionItems,
+                settings: app.settings
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'meetings_db.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Sync data
+        function syncData() {
+            const btn = document.getElementById('syncNowBtn');
+            const icon = document.getElementById('syncIcon');
+            const syncStatus = document.getElementById('syncStatus');
+            const prevMeetingCount = app.meetings.length;
+            const prevAICount = app.actionItems.length;
+
+            // Show progress bar
+            let progressBar = document.getElementById('syncProgressBar');
+            if (!progressBar) {
+                progressBar = document.createElement('div');
+                progressBar.id = 'syncProgressBar';
+                progressBar.style.cssText = 'position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg, var(--color-accent), #00d9c4);z-index:9999;transition:width 0.3s ease;width:0%;';
+                document.body.appendChild(progressBar);
+            }
+            progressBar.style.width = '0%';
+            progressBar.style.display = 'block';
+
+            // Spinning animation on button
+            icon.style.display = 'inline-block';
+            icon.style.animation = 'spin 1s linear infinite';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.querySelector('span:last-child') && (btn.childNodes[btn.childNodes.length - 1].textContent = ' Syncing...');
+
+            // Update sync status text
+            if (syncStatus) syncStatus.textContent = 'Syncing...';
+
+            // Progress simulation
+            progressBar.style.width = '30%';
+            setTimeout(() => { progressBar.style.width = '60%'; }, 300);
+
+            // Re-read embedded data
+            loadDataFromFile();
+
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+
+                setTimeout(() => {
+                    // Reset button
+                    icon.style.animation = '';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.innerHTML = '<span id="syncIcon">🔄</span> Sync Now';
+                    progressBar.style.display = 'none';
+
+                    // Update sync status
+                    if (syncStatus) syncStatus.textContent = 'Synced just now';
+
+                    // Calculate what changed
+                    const newMeetings = app.meetings.length - prevMeetingCount;
+                    const newAIs = app.actionItems.length - prevAICount;
+
+                    // Show notification toast
+                    const toast = document.createElement('div');
+                    toast.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:var(--color-bg-tertiary);color:var(--color-text-primary);padding:1rem 1.5rem;border-radius:0.75rem;border:1px solid var(--color-accent);box-shadow:var(--shadow-lg);z-index:1000;font-size:0.9rem;display:flex;flex-direction:column;gap:0.5rem;max-width:380px;opacity:0;transition:opacity 0.3s ease;';
+
+                    const changesSummary = newMeetings > 0 || newAIs > 0
+                        ? `${newMeetings > 0 ? newMeetings + ' new meeting' + (newMeetings > 1 ? 's' : '') : ''}${newMeetings > 0 && newAIs > 0 ? ', ' : ''}${newAIs > 0 ? newAIs + ' new action item' + (newAIs > 1 ? 's' : '') : ''} found.`
+                        : 'No new data since last sync.';
+
+                    toast.innerHTML = `
+                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                            <span style="font-size:1.1rem;">✅</span>
+                            <span style="font-weight:600;">Sync Complete</span>
+                            <span style="font-size:0.75rem;color:var(--color-text-tertiary);margin-left:auto;">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</span>
+                        </div>
+                        <div style="color:var(--color-text-secondary);font-size:0.825rem;">
+                            ${changesSummary}<br>
+                            <span style="color:var(--color-text-tertiary);font-size:0.8rem;">
+                                ${app.meetings.length} meetings &middot; ${app.actionItems.length} action items total
+                            </span>
+                        </div>
+                    `;
+                    document.body.appendChild(toast);
+                    requestAnimationFrame(() => { toast.style.opacity = '1'; });
+                    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 5000);
+                }, 400);
+            }, 600);
+        }
+
+        // Save overrides to localStorage
+        function saveOverrides() {
+            const overrides = {
+                actionItems: app.actionItems.map(ai => ({
+                    id: ai.id,
+                    status: ai.status,
+                    due_date: ai.due_date,
+                    priority: ai.priority,
+                    notes: ai.notes
+                }))
+            };
+            localStorage.setItem('meetingsDataOverrides', JSON.stringify(overrides));
+        }
+
+        // Save all data to localStorage
+        function saveData() {
+            localStorage.setItem('meetingsData', JSON.stringify({
+                meetings: app.meetings,
+                actionItems: app.actionItems,
+                settings: app.settings,
+                last_sync: app.lastSync
+            }));
+        }
+
+        // Update sync status
+        function updateSyncStatus() {
+            if (app.lastSync) {
+                const syncTime = new Date(app.lastSync);
+                document.getElementById('syncStatus').textContent = `Last synced: ${formatRelativeTime(syncTime)}`;
+            }
+        }
+
+        // Utility: Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // Utility: Format relative time
+        function formatRelativeTime(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays === 1) return 'yesterday';
+            if (diffDays < 7) return `${diffDays}d ago`;
+            return formatDate(date);
+        }
+
+        // Utility: Escape HTML
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
+</body>
+</html>
