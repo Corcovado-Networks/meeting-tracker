@@ -2237,20 +2237,32 @@
 
         // Initialize application
         function initializeApp() {
-            // Load from localStorage first
-            const stored = localStorage.getItem('meetingsData');
-            if (stored) {
+            // Load directly from EMBEDDED_DATA if available (primary source of truth)
+            if (typeof EMBEDDED_DATA !== 'undefined') {
+                const data = EMBEDDED_DATA;
+                app.meetings = data.meetings || [];
+                app.actionItems = data.actionItems || data.action_items || [];
+                app.slackThreads = data.slackThreads || data.slack_threads || [];
+                app.settings = data.settings || {};
+                app.lastSync = data.last_sync;
+
+                // Apply localStorage status overrides (for action item status changes)
                 try {
-                    const data = JSON.parse(stored);
-                    app.meetings = data.meetings || [];
-                    app.actionItems = data.actionItems || [];
-                    app.slackThreads = data.slackThreads || data.slack_threads || [];
-                    app.settings = data.settings || {};
-                    app.lastSync = data.last_sync;
-                    updateSyncStatus();
+                    const storedOverrides = localStorage.getItem('meetingsDataOverrides');
+                    if (storedOverrides) {
+                        const overrides = JSON.parse(storedOverrides);
+                        if (overrides.actionItems) {
+                            overrides.actionItems.forEach(override => {
+                                const ai = app.actionItems.find(a => a.id === override.id);
+                                if (ai) Object.assign(ai, override);
+                            });
+                        }
+                    }
                 } catch (e) {
-                    console.error('Failed to load stored data:', e);
+                    console.error('Failed to apply overrides:', e);
                 }
+
+                updateSyncStatus();
             }
 
             render();
