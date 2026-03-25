@@ -1280,9 +1280,12 @@
                 <textarea class="form-textarea" id="actionNotes" placeholder="Add any notes..."></textarea>
             </div>
 
-            <div class="editor-actions">
-                <button class="btn" id="cancelEditorBtn">Cancel</button>
-                <button class="btn btn-primary" id="saveEditorBtn">Save Changes</button>
+            <div class="editor-actions" style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn" id="deleteActionBtn" style="background: rgba(239,68,68,0.15); color: var(--color-danger); border: 1px solid rgba(239,68,68,0.3);">🗑 Delete</button>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button class="btn" id="cancelEditorBtn">Cancel</button>
+                    <button class="btn btn-primary" id="saveEditorBtn">Save Changes</button>
+                </div>
             </div>
         </div>
     </div>
@@ -2239,6 +2242,7 @@
             meetings: [],
             actionItems: [],
             slackThreads: [],
+            deletedActionItems: [],
             settings: {},
             lastSync: null,
             currentTab: 'overview',
@@ -2263,11 +2267,19 @@
                 app.settings = data.settings || {};
                 app.lastSync = data.last_sync;
 
-                // Apply localStorage status overrides (for action item status changes)
+                // Apply localStorage overrides (status changes + deletions)
                 try {
                     const storedOverrides = localStorage.getItem('meetingsDataOverrides');
                     if (storedOverrides) {
                         const overrides = JSON.parse(storedOverrides);
+
+                        // Remove deleted action items
+                        if (overrides.deletedActionItems && overrides.deletedActionItems.length > 0) {
+                            app.deletedActionItems = overrides.deletedActionItems;
+                            app.actionItems = app.actionItems.filter(ai => !overrides.deletedActionItems.includes(ai.id));
+                        }
+
+                        // Apply status/priority/date overrides
                         if (overrides.actionItems) {
                             overrides.actionItems.forEach(override => {
                                 const ai = app.actionItems.find(a => a.id === override.id);
@@ -2355,6 +2367,7 @@
             document.getElementById('closeEditorBtn').addEventListener('click', closeEditor);
             document.getElementById('cancelEditorBtn').addEventListener('click', closeEditor);
             document.getElementById('saveEditorBtn').addEventListener('click', saveActionItemEdit);
+            document.getElementById('deleteActionBtn').addEventListener('click', deleteActionItem);
             document.getElementById('editorOverlay').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('editorOverlay')) closeEditor();
             });
@@ -3145,6 +3158,24 @@
             render();
         }
 
+        // Delete action item
+        function deleteActionItem() {
+            if (!app.editingActionItem) return;
+            if (!confirm(`Delete action item: "${app.editingActionItem.description}"?\n\nThis cannot be undone.`)) return;
+
+            // Track deletion so it persists across syncs
+            if (!app.deletedActionItems) app.deletedActionItems = [];
+            app.deletedActionItems.push(app.editingActionItem.id);
+
+            const idx = app.actionItems.findIndex(a => a.id === app.editingActionItem.id);
+            if (idx !== -1) {
+                app.actionItems.splice(idx, 1);
+            }
+            saveOverrides();
+            closeEditor();
+            render();
+        }
+
         // Close editor
         function closeEditor() {
             document.getElementById('editorOverlay').classList.remove('active');
@@ -3397,7 +3428,8 @@
                     due_date: ai.due_date,
                     priority: ai.priority,
                     notes: ai.notes
-                }))
+                })),
+                deletedActionItems: app.deletedActionItems || []
             };
             localStorage.setItem('meetingsDataOverrides', JSON.stringify(overrides));
         }
