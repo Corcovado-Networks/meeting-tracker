@@ -1,6 +1,76 @@
 {
-  "last_sync": "2026-03-25T05:00:00Z",
+  "last_sync": "2026-03-25T17:20:28Z",
   "meetings": [
+    {
+      "id": "mtg-010",
+      "title": "Policy Tags/Mocks/Prototypes",
+      "date": "2026-03-25T11:01:00Z",
+      "duration_minutes": 28,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Policy-Tags-Mocks-Prototypes--019d25842a3974f9b63dcd3bb8dd98fa",
+      "participants": [
+        "Jacquie",
+        "Dana",
+        "Paul",
+        "Irina",
+        "Brent"
+      ],
+      "talk_time": {
+        "Jacquie": 33,
+        "Paul": 30,
+        "Dana": 28,
+        "Irina": 8
+      },
+      "key_points": [
+        "Jacquie demonstrated a working prototype for policy tag management, allowing creation, storage, and hierarchical organization of tags \u2014 built over the weekend.",
+        "Tags are intended to be applied to policy groups (current sprint scope) and eventually to workloads, enabling richer enforcement matching by interface attributes.",
+        "The concept of 'workload groups' was introduced as distinct from policy groups: policy groups define criteria for assets, while workload groups categorize workloads by business function (e.g., prod vs. DevOps) rather than device identity.",
+        "Significant confusion emerged among participants about the overall architecture \u2014 how tags, policy groups, workload groups, and workload types relate to each other \u2014 indicating the vision has not been clearly communicated.",
+        "The team discussed tagging interfaces on workloads (e.g., AWS SGT mappings) so Elisity can match traffic and apply enforcement; this is a new capability not yet fully defined.",
+        "Real-world customer examples (Cardinal Glass, Helion) were proposed as anchors for mocking up use cases to make the abstract concepts more concrete.",
+        "Dana flagged that without a unified diagram showing how all components connect, participants cannot effectively contribute to or validate the design.",
+        "Paul left early due to a conflicting Johnson & Johnson meeting; the meeting ended with agreement to schedule separate focused sessions on architecture and use cases."
+      ],
+      "summary": "Working session to review Jacquie's weekend-built prototype for policy tag management. Jacquie walked through the UI for creating and organizing tags hierarchically, with planned integration into policy groups and eventually workloads. The discussion exposed significant alignment gaps: participants were unclear on how tags, workload groups, workload types, and policy groups interrelate. Dana and Paul pushed for a clearer architectural diagram and real-world customer examples to ground the design. The meeting concluded without resolution, with action items to schedule dedicated sessions for architecture alignment and to create visualization artifacts.",
+      "tags": [
+        "policy-tags",
+        "tag-management",
+        "product",
+        "prototype",
+        "workloads",
+        "UX",
+        "engineering",
+        "internal"
+      ],
+      "action_items": [
+        {
+          "description": "Schedule a dedicated architecture session to align on overall vision, problem statements, and how tags/policy groups/workload groups interconnect",
+          "owner": "Brent",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Create a diagram showing how all components (tags, policy groups, workload groups, workload types, interfaces) map together",
+          "owner": "Brent",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Mock up real-world customer examples (Cardinal Glass, Helion) to demonstrate tag management functionality in context",
+          "owner": "Jacquie",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Schedule separate session focused specifically on future workload implementation and how it differs from current policy groups",
+          "owner": "Brent",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": []
+    },
     {
       "id": "mtg-008",
       "title": "Elisity - Catalyst Center InterOp conversation",
