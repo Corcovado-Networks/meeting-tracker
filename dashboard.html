@@ -2228,6 +2228,17 @@
   }
 };
 
+        // Application state
+        const app = {
+            meetings: [],
+            actionItems: [],
+            slackThreads: [],
+            settings: {},
+            lastSync: null,
+            currentTab: 'overview',
+            editingActionItem: null
+        };
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             initializeApp();
