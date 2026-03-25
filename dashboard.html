@@ -2363,7 +2363,8 @@
                     // Merge file data with localStorage
                     const fileData = {
                         meetings: data.meetings || [],
-                        actionItems: data.action_items || [],
+                        actionItems: data.actionItems || data.action_items || [],
+                        slackThreads: data.slackThreads || data.slack_threads || [],
                         settings: data.settings || {},
                         last_sync: data.last_sync
                     };
