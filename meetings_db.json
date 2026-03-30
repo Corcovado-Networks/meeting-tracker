@@ -1,6 +1,570 @@
 {
-  "last_sync": "2026-03-25T17:20:28Z",
+  "last_sync": "2026-03-30T10:50:00Z",
   "meetings": [
+    {
+      "id": "mtg-019",
+      "title": "LPA Aruba CX Deep-Dive (Miha & Jesse)",
+      "date": "2026-03-30T10:07:00Z",
+      "duration_minutes": 39,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/10-07-AM---Slack-meeting-March-30--019d3f1233427608ae5d50363b1317e8",
+      "participants": [
+        "Miha",
+        "Jesse"
+      ],
+      "talk_time": {
+        "Jesse": 63,
+        "Miha": 37
+      },
+      "key_points": [
+        "Miha built initial LPA RADIUS implementation for Aruba CX using CloudCode/Claude \u2014 code was largely complete at 48% context window, now polishing and fixing minor bugs.",
+        "Jesse walked through Aruba CX policy architecture in detail: IP classes (DHCP, DNS, RFC 1918), port access policies, roles, and how they chain together for enforcement.",
+        "Lab access plan: Jesse to set up Headscale/Tailscale VPN or jump box access so Miha can SSH directly to the Aruba 6300 switch for testing.",
+        "RADIUS accounting confirmed as the primary device tracking mechanism (replacing Syslog), with Aruba client tracking (IPDT equivalent) as a complementary discovery source.",
+        "COA vs disconnect clarified: Aruba requires disconnect (not COA) for re-authentication; Miha referenced Jacob's existing code patterns which Claude also discovered from GitHub PRs.",
+        "Port config discussed as the hardest part \u2014 multi-domain setup with client limits (max 5), IP phone detection, access point handling, and critical/failover/preauth roles for RADIUS server unreachability.",
+        "Custom lightweight RADIUS server implementation (not FreeRADIUS) \u2014 described as very lightweight, scalable, and stateless; multiple VEs can accept RADIUS access packets with only one sending COA.",
+        "Policy modification strategy: must modify policies in-place (not remove and re-add) to avoid orphaning devices on Aruba \u2014 uses temporary policy clone + COA migration approach."
+      ],
+      "summary": "Deep technical session between Miha and Jesse on LPA RADIUS-based enforcement for Aruba CX. Miha has a working initial implementation built with Claude/CloudCode. Jesse walked through the full Aruba CX policy stack (classes, port access policies, roles) and lab setup. Key decisions: use RADIUS accounting (not Syslog) for tracking, disconnect (not COA) for re-auth, and in-place policy modification to avoid device orphaning. Lab access via Headscale/Tailscale VPN being set up so Miha can test against Jesse's Aruba 6300. Custom lightweight RADIUS server confirmed as the approach \u2014 stateless and scalable across multiple VEs.",
+      "tags": [
+        "LPA",
+        "RADIUS",
+        "Aruba-CX",
+        "engineering",
+        "deep-dive",
+        "internal",
+        "Tiger-team",
+        "lab-access"
+      ],
+      "action_items": [
+        {
+          "description": "Set up Headscale/Tailscale VPN or jump box access for Miha to reach Aruba 6300 lab switch",
+          "owner": "Jesse",
+          "priority": "high",
+          "due_date": "2026-03-30"
+        },
+        {
+          "description": "Complete initial LPA RADIUS testing against Aruba CX in Jesse's lab environment",
+          "owner": "Miha",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Add RADIUS accounting support as next capability after basic enforcement is working",
+          "owner": "Miha",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Determine wireless/access point handling strategy \u2014 whether to skip MAV config entirely for APs",
+          "owner": "Jesse",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": [
+        {
+          "channel": "DM (Brent & Michal)",
+          "ts": "1774846918.455139",
+          "permalink": "https://elisity.slack.com/archives/D05B09716TY/p1774846918455139",
+          "summary": "Michal (Miha): updated ENG-23263 Jira ticket and asking Brent for lab access"
+        },
+        {
+          "channel": "DM (Brent & Michal)",
+          "ts": "1774776818.009029",
+          "permalink": "https://elisity.slack.com/archives/D05B09716TY/p1774776818009029",
+          "summary": "Michal asking Brent for LPA presentation from Friday and confirming Aruba as the first dataplane target for ENG-23263"
+        }
+      ]
+    },
+    {
+      "id": "mtg-017",
+      "title": "Brent & Mike 1:1 (weekly series)",
+      "date": "2026-03-27T17:00:00Z",
+      "duration_minutes": 16,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Brent-Mike-1-1-weekly-series---019d300693be77bc88ac8a83be5de31f",
+      "participants": [
+        "Brent",
+        "Mike"
+      ],
+      "talk_time": {
+        "Mike": 61,
+        "Brent": 20
+      },
+      "key_points": [
+        "LinkedIn release video posted; strong early traction and good engagement on the post.",
+        "Demo content development with Taylor running behind schedule; work ongoing despite delays.",
+        "Mike demonstrated AI-assisted documentation automation: Claude automatically captures screenshots at each step and self-reports when a screenshot is incorrect or misrepresents the UI state.",
+        "Discussion of Claude's Cowork feature vs. Claude Code \u2014 Brent uses both; Mike has been leveraging Claude Code for documentation automation workflows.",
+        "Mike is developing an internal AI productivity tool ('central brain') delivering significant speed gains; plans to package it for local team installation rather than hosting it, to work out remaining quirks before broader rollout.",
+        "Coordination with Brittany underway on content deliverables; William flagged as a friction point in the collaboration workflow."
+      ],
+      "summary": "Weekly 1:1 between Brent and Mike. Discussed strong LinkedIn traction on the release video and ongoing demo content work with Taylor (running late). Mike shared progress on AI-assisted documentation tooling with automated self-validating screenshots, and his internal 'central brain' AI productivity tool he's refining for team distribution as a local install package. Brief discussion on Claude Cowork vs. Claude Code. Coordination with Brittany noted; William flagged as a collaboration friction point.",
+      "tags": [
+        "1:1",
+        "weekly-sync",
+        "marketing",
+        "demo",
+        "documentation",
+        "AI-tools",
+        "linkedin",
+        "internal"
+      ],
+      "action_items": [
+        {
+          "description": "Package 'central brain' AI productivity tool for team distribution as local install",
+          "owner": "Mike",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Complete demo content development with Taylor",
+          "owner": "Brent",
+          "priority": "high",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": [
+        {
+          "channel": "#demo-lab",
+          "ts": "1774641873.199809",
+          "permalink": "https://elisity.slack.com/archives/C02HCTVRWEB/p1774641873199809",
+          "summary": "Taylor: both demo environments (healthcare.elisity.io, ot.elisity.io) ready with 17+ connectors and quality device data for walkthroughs"
+        }
+      ]
+    },
+    {
+      "id": "mtg-016",
+      "title": "CX-CS Weekly Update",
+      "date": "2026-03-27T11:00:00Z",
+      "duration_minutes": 35,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/CX-CS-Weekly-Update--019d2f982cda752c902b245f0e18407d",
+      "participants": [
+        "Jesse",
+        "Brent",
+        "Paul",
+        "Pete",
+        "Dan"
+      ],
+      "talk_time": {
+        "Jesse": 47,
+        "Brent": 32,
+        "Speaker 5": 11,
+        "Paul": 9,
+        "Speaker 4": 1
+      },
+      "key_points": [
+        "CHOP Catalyst Center fix is functional \u2014 Elisity configs coexist with Cat Center config \u2014 but the compliance engine is still actively removing Elisity's configs, representing the remaining blocker.",
+        "Production release 26.2 deployed successfully; the team noted a smooth rollout with no major escalations.",
+        "Providence showed the largest policy adoption jump this week on the CX policy dashboard.",
+        "Octapharma docking station issue: Mihal joined an Octapharma call to discuss options; Dan is meeting with Octapharma today to finalize a Feature Request after which the FR will be submitted.",
+        "A customer opened a new printer Policy Group and new policy as a workaround for an existing bug; team agreed to push them to open a TAC case to tie it to existing open cases.",
+        "Cisco SEs are aggressively pushing Catalyst Center for compliance reporting, activating AVC telemetry as a side effect \u2014 this is creating Elisity coexistence conflicts beyond CHOP.",
+        "Onsemi added to the 26.3 upgrade schedule; production upgrade 26.3 planning underway with batch assignments discussed.",
+        "Walmart account mentioned by Brent as a note for follow-up in the CX pipeline."
+      ],
+      "summary": "Weekly CX-CS team meeting covering customer deployment and support status. 26.2 released smoothly. Providence showing strong policy adoption progress. CHOP Catalyst Center coexistence fix is working technically but compliance engine reverting configs remains an open problem. Octapharma docking station FR to close after Dan's meeting today. Cisco SE teams flagged as actively enabling AVC telemetry for compliance, creating a broader pattern of potential coexistence conflicts beyond CHOP. Onsemi added to 26.3 upgrade batch.",
+      "tags": [
+        "CX-CS",
+        "weekly-update",
+        "CHOP",
+        "Catalyst Center",
+        "Providence",
+        "Octapharma",
+        "26.2",
+        "26.3",
+        "Onsemi",
+        "customer-success"
+      ],
+      "action_items": [
+        {
+          "description": "Finalize Octapharma Feature Request after Dan's meeting with Octapharma today",
+          "owner": "Dan",
+          "priority": "high",
+          "due_date": "2026-03-27"
+        },
+        {
+          "description": "Push customer to open a TAC case for printer PG bug to link with existing open cases",
+          "owner": "Pete",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Monitor CHOP Catalyst Center compliance engine removal of Elisity configs and track fix progress",
+          "owner": "Jesse",
+          "priority": "high",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": [
+        {
+          "channel": "#cust-childrens-hosp-of-philadelphia",
+          "ts": "1774303817.458229",
+          "permalink": "https://elisity.slack.com/archives/C07M8GBMFM0/p1774303817458229",
+          "summary": "Pete escalating CHOP to CAP status; scheduling meeting with Ralph, Brent, and Jesse due to customer frustration"
+        },
+        {
+          "channel": "Group DM (CX team)",
+          "ts": "1774352020.219789",
+          "permalink": "https://elisity.slack.com/archives/C0AP7FN0TEU/p1774352020219789",
+          "summary": "Ralph: NetFlow/Catalyst Center coexistence fix delayed to 26.4 (end of May); recommends no NetFlow deployment to main hospital switches for 60 days"
+        },
+        {
+          "channel": "#product-and-field",
+          "ts": "1774541865.003299",
+          "permalink": "https://elisity.slack.com/archives/C03AVJWCJ94/p1774541865003299?thread_ts=1774541865.003299&cid=C03AVJWCJ94",
+          "summary": "Jesse: thread for Cisco/DNAC/Catalyst Center questions ahead of Brent's Cisco SE meeting \u2014 2 replies"
+        },
+        {
+          "channel": "#cust-octapharma",
+          "ts": "1774533892.235019",
+          "permalink": "https://elisity.slack.com/archives/C07MCUF60T1/p1774533892235019",
+          "summary": "Cece asking whether to move Octapharma from Batch 1 to a later 26.3 upgrade batch"
+        }
+      ]
+    },
+    {
+      "id": "mtg-015",
+      "title": "LPA Tiger Team Sync",
+      "date": "2026-03-27T09:59:00Z",
+      "duration_minutes": 47,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Brent-Colwell-Elisity-s-Personal-Meeting-Room--019d2f61582a727397986bf2ca57334e",
+      "participants": [
+        "Brent",
+        "Jesse",
+        "Piotr",
+        "Agata",
+        "Miha",
+        "Rupa"
+      ],
+      "talk_time": {
+        "Piotr": 34,
+        "Brent": 29,
+        "Jesse": 28,
+        "Agata": 5,
+        "Rupa": 4
+      },
+      "key_points": [
+        "Zero Trust Posture feature was merged in under two weeks \u2014 celebrated as a significant engineering win by the team.",
+        "LPA (Lightweight Policy Agent) RADIUS-based enforcement development continuing with the Tiger team; work started from the handoff meeting (mtg-006).",
+        "European team (Piotr, Agata) needs an Aruba 6300 switch for their lab; Agata confirmed ordering a 6300 at ~$640; Brent approved up to $2,000 for the hardware to avoid blocking progress.",
+        "Brent and Jesse already have Aruba 6300 lab environments set up on their side for testing.",
+        "Aruba 6300F vs. plain 6300 variants discussed; Jesse advised on functional differences; team proceeding with available option.",
+        "Team is developing RADIUS-based policy association for Aruba CX platform as the first LPA target, with ~$2-3M ARR potential at Cinquora.",
+        "Meeting included distributed team members from Europe (Poland) and US, with calls happening in early morning US time to accommodate timezone differences."
+      ],
+      "summary": "LPA Tiger Team weekly sync. Zero Trust Posture merged in under 2 weeks \u2014 strong momentum. European lab team (Piotr, Agata) procuring an Aruba 6300 switch (~$640, approved by Brent up to $2K) to match the US lab setup. Jesse and Brent already have Aruba 6300 environments. Core work focuses on RADIUS-based policy enforcement for Aruba CX platform as Phase 1 of the LPA initiative, targeting the Cinquora opportunity (~$2-3M ARR). Team continues distributed collaboration between US and Poland.",
+      "tags": [
+        "LPA",
+        "Tiger-team",
+        "RADIUS",
+        "Aruba",
+        "engineering",
+        "internal",
+        "Zero-Trust-Posture"
+      ],
+      "action_items": [
+        {
+          "description": "Complete Aruba 6300 switch procurement for European lab (approved up to $2,000)",
+          "owner": "Agata",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Continue RADIUS-based LPA implementation on Aruba CX platform",
+          "owner": "Piotr",
+          "priority": "high",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": [
+        {
+          "channel": "#eng-22215-workloads-phase1",
+          "ts": "1774208602.705579",
+          "permalink": "https://elisity.slack.com/archives/C0AGG8Q98SJ/p1774208602705579?thread_ts=1774208602.705579&cid=C0AGG8Q98SJ",
+          "summary": "Michal: workloads phase-1 architecture discussion with Piotr, Agata, Brent, Jesse \u2014 27 replies on policy service grouping model for cloud workloads"
+        }
+      ]
+    },
+    {
+      "id": "mtg-014",
+      "title": "UX Navigation Design Review",
+      "date": "2026-03-27T08:59:00Z",
+      "duration_minutes": 44,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Iryna-Nekrasova-s-Personal-Meeting-Room--019d2bd7c98070c0bc4ef0daf2c81836",
+      "participants": [
+        "Pete",
+        "Paul Furman",
+        "Iryna",
+        "Brent"
+      ],
+      "talk_time": {
+        "Paul Furman": 36,
+        "Pete": 33,
+        "Iryna": 23,
+        "Speaker 2": 8
+      },
+      "key_points": [
+        "Navigation design decision: clicking 'Policy' in the main nav will drop a sub-menu rather than jumping directly to the policy matrix \u2014 confirmed by Iryna.",
+        "For mature customers, the policy matrix is the most common destination; proposal to make matrix the default landing when clicking Policy was discussed as a good compromise.",
+        "Same navigation pattern discussed for Identity Graph: devices page would open as the default.",
+        "Elysia Assistant integration into help tooltips debated: concern raised that customers who have disabled AI features cannot access Elysia Assistant help, making static descriptions necessary as fallback.",
+        "Traffic analysis component inside the policy matrix drawer identified as redundant with the policy details page \u2014 targeted for removal pending CX validation.",
+        "Navigation changes aim to reduce mouse precision requirements and improve flow for day-to-day operational users.",
+        "Paul is designated as the contact for customers without AI enabled who need help navigating new features."
+      ],
+      "summary": "UX/product design session reviewing navigation patterns for the policy section and identity graph. Key decision: policy nav shows dropdown menu first. Matrix as default landing considered a good compromise for power users. Elysia Assistant in tooltips hit a snag \u2014 customers with AI disabled need static text fallback, with Paul as manual support. Traffic analysis drawer slated for removal from matrix once CX confirms no impact. Meeting focused on reducing UI complexity for daily operational workflows.",
+      "tags": [
+        "UX",
+        "navigation",
+        "product",
+        "policy-matrix",
+        "Elysia-Assistant",
+        "internal",
+        "design"
+      ],
+      "action_items": [
+        {
+          "description": "Finalize and implement dropdown navigation pattern for Policy and Identity Graph sections",
+          "owner": "Iryna",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Decide on Elysia Assistant vs. static tooltip fallback for help content; document decision for customers with AI disabled",
+          "owner": "Paul Furman",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": [
+        {
+          "channel": "#product-team",
+          "ts": "1774206866.988569",
+          "permalink": "https://elisity.slack.com/archives/C08AK4H655K/p1774206866988569",
+          "summary": "Iryna sharing 3 options for menu/header restructure \u2014 Help Center and profile settings placement proposals ahead of this review meeting"
+        }
+      ]
+    },
+    {
+      "id": "mtg-018",
+      "title": "avconferenced meeting March 25 (brief recording)",
+      "date": "2026-03-26T12:21:00Z",
+      "duration_minutes": 1,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/12-21-PM---avconferenced-meeting-March-25--019d267216dc716d8c712e2101a61267",
+      "participants": [
+        "Speaker 1",
+        "Speaker 2"
+      ],
+      "talk_time": {
+        "Speaker 1": 51,
+        "Speaker 2": 49
+      },
+      "key_points": [
+        "Very brief (23-second) accidental or incidental recording \u2014 no substantive content captured."
+      ],
+      "summary": "A 23-second recording from an avconferenced session on March 26. Contains no meaningful content \u2014 appears to be an accidental or incidental recording. No participants identified, no action items generated.",
+      "tags": [
+        "brief",
+        "accidental-recording"
+      ],
+      "action_items": [],
+      "starred": false,
+      "slack_threads": []
+    },
+    {
+      "id": "mtg-013",
+      "title": "Product Guardrails & UI Architecture Discussion",
+      "date": "2026-03-26T11:01:00Z",
+      "duration_minutes": 15,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Zoom-Meeting--019d2aaa7c297672b366851fb924f02b",
+      "participants": [
+        "Brent",
+        "Speaker 2"
+      ],
+      "talk_time": {
+        "Brent": 50,
+        "Speaker 2": 50
+      },
+      "key_points": [
+        "Referenced Prism FC's 'Device Insights' as a model: TAC team was unaware of outages until customers called in, highlighting the need for proactive guardrails and observability.",
+        "Chuck's 'YOLO' feature discussed \u2014 shows VEN switch capacity vs. active DAG entries, providing a policy guardrail for switch capacity limits.",
+        "Core UI problem identified: once a feature is added to the UI (views, filters, now tags), it is nearly impossible to remove \u2014 raising the stakes for any new UI addition.",
+        "Current complexity: customers already have views, have filters, and now tags are being introduced \u2014 the layering risks creating an unmanageable UI surface.",
+        "Agreement to build a clear document presenting 'this is the problem' with real-world customer environments before finalizing the tags/views/filters approach.",
+        "Need to present concrete examples showing what happens with the current approach vs. alternatives to get team alignment."
+      ],
+      "summary": "Short two-person product architecture discussion on policy guardrails and UI complexity. Used Prism FC Device Insights and Chuck's VEN capacity feature as context. Central concern: layering views, filters, and tags creates irreversible UI complexity. Agreement to build a proper problem statement with real-world examples before proceeding, rather than continuing to add UI abstractions without a clear architecture rationale.",
+      "tags": [
+        "product",
+        "UX",
+        "architecture",
+        "guardrails",
+        "tags",
+        "internal",
+        "policy"
+      ],
+      "action_items": [
+        {
+          "description": "Build a clear document presenting the problem with views/filters/tags UI complexity, using real-world customer environment examples",
+          "owner": "Brent",
+          "priority": "high",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": []
+    },
+    {
+      "id": "mtg-012",
+      "title": "Sprint 26.4 Feature Review",
+      "date": "2026-03-26T09:59:00Z",
+      "duration_minutes": 60,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Brent-Colwell-Elisity-s-Personal-Meeting-Room--019d2a72264c75dcb72ccbe58063bfb8",
+      "participants": [
+        "Brent",
+        "Brian",
+        "Jesse",
+        "Paul",
+        "Iryna",
+        "Andrew",
+        "Phil",
+        "Pat",
+        "Neil"
+      ],
+      "talk_time": {
+        "Brian": 39,
+        "Brent": 31,
+        "Speaker 2": 13,
+        "Speaker 4": 13,
+        "Speaker 5": 4
+      },
+      "key_points": [
+        "26.4 sprint review focused on UX improvements: new feature modals to highlight incoming features, improved editing workflows adding a 'finish action' to each step based on CX team feedback.",
+        "Color and typography UI updates in progress as part of a broader UI refresh for 26.4.",
+        "Policy matrix navigation clarified: clicking a cell in the matrix navigates to the main policy, not a return path \u2014 this was a point of confusion addressed in the review.",
+        "Traffic analysis component in the policy matrix drawer identified as redundant with the policy details page \u2014 marked yellow pending CX validation from Haferman; targeted for removal once confirmed.",
+        "ServiceNow integration confirmed as a 26.4 deliverable; Helion was the primary requesting customer, with one to two additional customers also interested.",
+        "CX team feedback incorporated into editing workflow redesign \u2014 finishing actions from any step in the workflow was a top pain point.",
+        "Broad participation from engineering, product, UX, and CX-adjacent team members; Brent hosted in his personal meeting room."
+      ],
+      "summary": "Sprint 26.4 feature review covering the full breadth of upcoming UX improvements. Editing workflows get a 'finish from any step' capability based on CX feedback. New feature modals and color/typography refresh included. Traffic analysis drawer in policy matrix targeted for removal \u2014 awaiting CX confirmation from Haferman. ServiceNow integration confirmed for Helion (and 1-2 others). Policy matrix cell click navigation clarified.",
+      "tags": [
+        "sprint",
+        "26.4",
+        "product",
+        "UX",
+        "engineering",
+        "ServiceNow",
+        "Helion",
+        "internal"
+      ],
+      "action_items": [
+        {
+          "description": "Get confirmation from Paul Haferman (CX) that removing the traffic analysis drawer from the policy matrix won't cause issues for customers",
+          "owner": "Brian",
+          "priority": "high",
+          "due_date": "2026-03-27"
+        },
+        {
+          "description": "Implement ServiceNow integration feature for 26.4 targeting Helion and other requesting customers",
+          "owner": "Iryna",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Implement 'finish action' at each editing workflow step based on CX team feedback",
+          "owner": "Iryna",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": []
+    },
+    {
+      "id": "mtg-011",
+      "title": "Elisity Roadmap Discussion with J&J",
+      "date": "2026-03-25T08:30:00Z",
+      "duration_minutes": 72,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/08-30-AM---Microsoft-Teams-meeting-March-25--019d259eddfa73f895bdfb51012b2e2d",
+      "participants": [
+        "Brent",
+        "Grant",
+        "Bill Pruitt",
+        "Dan",
+        "Bishop",
+        "Terry",
+        "Chris",
+        "Joe"
+      ],
+      "talk_time": {
+        "Grant": 65,
+        "Brent": 17,
+        "Terry": 7,
+        "Joe": 6,
+        "Bishop": 5
+      },
+      "key_points": [
+        "Grant (Head of Product) and Bill Pruitt (Head of Analytics) presented Elisity's 12-24 month product roadmap to Johnson & Johnson stakeholders.",
+        "Roadmap focused on four pillars: cloud and data center workload discovery and policy enforcement, AI-powered operations (progressing from AI-assisted to autonomous), AI agent detection capabilities, and ubiquitous edge visibility with device profiling.",
+        "Security posture assessment and segmentation scoring were highlighted as near-term deliverables.",
+        "J&J team expressed caution about autonomous AI operations in sensitive enterprise and OT environments, preferring AI-assisted with human oversight.",
+        "Non-human identity (NHI) integration between Elisity and J&J's IAM systems was discussed in detail, with Bishop (J&J) as the key contact for follow-up.",
+        "The discussion covered both IT and OT (Operational Technology) security use cases within J&J's environment.",
+        "J&J team provided feature requests and expressed interest in deeper dive sessions on specific roadmap topics."
+      ],
+      "summary": "Elisity product roadmap presentation to Johnson & Johnson. Grant (Head of Product) and Bill Pruitt (Head of Analytics) walked J&J stakeholders through Elisity's 12-24 month vision, covering cloud workload discovery, AI-driven security operations, NHI identity integration, and device profiling. J&J expressed strong interest but flagged caution around fully autonomous AI in sensitive environments. Follow-up actions center on NHI/IAM integration with J&J's identity systems and scheduling deeper technical dives on areas of interest.",
+      "tags": [
+        "product-roadmap",
+        "J&J",
+        "johnson-and-johnson",
+        "AI",
+        "cloud-workloads",
+        "customer",
+        "security-posture",
+        "NHI",
+        "OT",
+        "enterprise",
+        "roadmap"
+      ],
+      "action_items": [
+        {
+          "description": "Schedule follow-up conversation about non-human identity (NHI) integration between Elisity and J&J's IAM systems",
+          "owner": "Bishop",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Discuss and document feature requests raised by J&J during the roadmap session",
+          "owner": "Dan",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Coordinate deeper dive technical sessions on specific roadmap topics of interest for J&J",
+          "owner": "Dan",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "starred": false,
+      "slack_threads": []
+    },
     {
       "id": "mtg-010",
       "title": "Policy Tags/Mocks/Prototypes",
@@ -963,6 +1527,149 @@
       "completed_date": null,
       "priority": "normal",
       "notes": "More classified devices = higher fidelity rules"
+    },
+    {
+      "id": "ai-037",
+      "meeting_id": "mtg-016",
+      "meeting_title": "CX-CS Weekly Update",
+      "description": "Finalize Octapharma Feature Request after Dan's meeting with Octapharma",
+      "owner": "Dan",
+      "status": "open",
+      "due_date": "2026-03-27",
+      "created_date": "2026-03-27T11:00:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Mihal already joined Octapharma call to walk through options; FR to close after this meeting"
+    },
+    {
+      "id": "ai-038",
+      "meeting_id": "mtg-016",
+      "meeting_title": "CX-CS Weekly Update",
+      "description": "Push customer to open a TAC case for printer PG bug to link with other open cases",
+      "owner": "Pete",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-27T11:00:00Z",
+      "completed_date": null,
+      "priority": "medium",
+      "notes": "Customer created new PG and policy as a workaround; TAC case needed to track properly"
+    },
+    {
+      "id": "ai-039",
+      "meeting_id": "mtg-016",
+      "meeting_title": "CX-CS Weekly Update",
+      "description": "Track CHOP Catalyst Center compliance engine issue \u2014 confirm when fix prevents configs from being reverted",
+      "owner": "Jesse",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-27T11:00:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Coexistence fix working; compliance engine still removing Elisity configs \u2014 end-of-April release is targeted fix"
+    },
+    {
+      "id": "ai-040",
+      "meeting_id": "mtg-015",
+      "meeting_title": "LPA Tiger Team Sync",
+      "description": "Complete Aruba 6300 switch procurement for European lab",
+      "owner": "Agata",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-27T09:59:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Brent approved up to $2,000; Agata found 6300 at ~$640; Jesse advised on 6300F vs. plain 6300 variants"
+    },
+    {
+      "id": "ai-041",
+      "meeting_id": "mtg-015",
+      "meeting_title": "LPA Tiger Team Sync",
+      "description": "Continue RADIUS-based LPA implementation targeting Aruba CX platform",
+      "owner": "Piotr",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-27T09:59:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Primary unlock target is Cinquora at ~$2-3M ARR; European team leading implementation"
+    },
+    {
+      "id": "ai-042",
+      "meeting_id": "mtg-014",
+      "meeting_title": "UX Navigation Design Review",
+      "description": "Implement dropdown navigation pattern for Policy and Identity Graph sections in 26.4",
+      "owner": "Iryna",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-27T08:59:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Policy \u2192 dropdown menu; Identity Graph \u2192 devices page default; confirmed with Iryna in this session"
+    },
+    {
+      "id": "ai-043",
+      "meeting_id": "mtg-014",
+      "meeting_title": "UX Navigation Design Review",
+      "description": "Document decision on Elysia Assistant vs. static tooltip fallback for customers with AI disabled",
+      "owner": "Paul Furman",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-27T08:59:00Z",
+      "completed_date": null,
+      "priority": "medium",
+      "notes": "Paul designated as manual support contact for AI-disabled customers needing feature guidance"
+    },
+    {
+      "id": "ai-044",
+      "meeting_id": "mtg-013",
+      "meeting_title": "Product Guardrails & UI Architecture Discussion",
+      "description": "Build a clear problem statement document for views/filters/tags UI complexity with real-world customer examples",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-26T11:01:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Must include: problem description, impact of current approach, real-world customer topology examples, alternative proposals"
+    },
+    {
+      "id": "ai-045",
+      "meeting_id": "mtg-012",
+      "meeting_title": "Sprint 26.4 Feature Review",
+      "description": "Confirm with Paul Haferman that removing traffic analysis drawer from policy matrix won't impact CX workflows",
+      "owner": "Brian",
+      "status": "open",
+      "due_date": "2026-03-27",
+      "created_date": "2026-03-26T09:59:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Component is redundant with policy details page; marked yellow in sprint board pending this confirmation"
+    },
+    {
+      "id": "ai-046",
+      "meeting_id": "mtg-012",
+      "meeting_title": "Sprint 26.4 Feature Review",
+      "description": "Implement ServiceNow integration for 26.4 targeting Helion and other requesting customers",
+      "owner": "Iryna",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-26T09:59:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Helion confirmed as primary customer; 1-2 additional customers also interested"
+    },
+    {
+      "id": "ai-047",
+      "meeting_id": "mtg-012",
+      "meeting_title": "Sprint 26.4 Feature Review",
+      "description": "Implement 'finish action' at each editing workflow step to improve usability based on CX team feedback",
+      "owner": "Iryna",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-03-26T09:59:00Z",
+      "completed_date": null,
+      "priority": "medium",
+      "notes": "CX team flagged that current workflow requires navigating to a specific step to finish \u2014 adding finish action at each step"
     }
   ],
   "settings": {
