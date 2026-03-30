@@ -1,6 +1,125 @@
 {
-  "last_sync": "2026-03-30T10:50:00Z",
+  "last_sync": "2026-03-30T14:30:00Z",
   "meetings": [
+    {
+      "id": "mtg-020",
+      "title": "ELT Weekly Call",
+      "date": "2026-03-30T11:59:00Z",
+      "duration_minutes": 85,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/ELT-Weekly-Call---019d3f7973ed7547af0ec446d14ea677",
+      "participants": [
+        "James",
+        "Charlie",
+        "Pete",
+        "Brent",
+        "Esther"
+      ],
+      "talk_time": {
+        "Pete": 40,
+        "James": 27,
+        "Charlie": 19,
+        "Brent": 14
+      },
+      "key_points": [
+        "RSA 2026 declared best ever \u2014 overwhelmingly positive feedback from prospects, analysts, and partners; 2-3 deals directly attributable to last 10 days of effort.",
+        "Illumio CEO Andrew met with James for 75 minutes \u2014 discussed potential MQ alignment on segmentation definition, possible partnership/integration; Illumio acknowledges Elisity has more happily deployed customers where they compete. Charlie pulled Salesforce list of accounts with Illumio installed.",
+        "Non-human identity explosion was dominant RSA theme \u2014 Gartner says 5-to-1 non-human-to-human ratio going 10X next year; Elisity\u2019s LPA positioning as \u2018sudo for AI\u2019 resonated strongly.",
+        "Aruba CX platform evaluation (PIOT) kicked off \u2014 feasibility proven, not yet greenlit; deep dive with engineering team Wednesday. Concern about premature field messaging; Sencora (multi-million deal) and Alabama Covenant identified as key prospects needing Aruba support.",
+        "All-hands planned for Tuesday \u2014 RSA highlights, Forrester Wave and Gartner MQ prep update, William Toll recognition for RSA contribution, team thank-you.",
+        "GTM end-to-end sales motion review scheduled for Thursday \u2014 Charlie, Dan, Chris, and Ryan presenting on stage 0-6 optimization; monitoring fully loaded cost of first meetings as key metric.",
+        "Healthcare ISAC summit sponsorship in Austin in two weeks \u2014 Rafia from Colgate-Palmolive (Alex\u2019s recommendation) to co-present on modern segmentation approach; Charlie running point on sponsorship with Jason.",
+        "Anya ramping well as new hire \u2014 two weeks in, shadowing calls, from \u2018Milwaukee Mafia crew\u2019; Northeastern interviewing another batch of candidates today.",
+        "Branded Elisity rickshaws at RSA were a hit \u2014 people taking photos and sharing on social; Winston Fu and others engaged; described as genius low-cost guerrilla marketing.",
+        "Demo environments progressing \u2014 two strong identity graph demos and two flow demos ready for quick demos; review with Taylor this afternoon; Dan\u2019s team (Jason) has additional feedback on larger demo needs."
+      ],
+      "summary": "ELT weekly call dominated by RSA 2026 debrief and strategic planning. RSA declared best conference ever with overwhelmingly positive feedback, 2-3 deals directly attributable, and strong analyst/partner engagement. James reported a 75-minute meeting with Illumio CEO Andrew exploring potential MQ alignment and partnership \u2014 Charlie compiled Salesforce data on Illumio accounts. Non-human identity and LPA as 'sudo for AI' emerged as key market themes. Aruba CX platform evaluation via PIOT has proven feasibility but is not yet greenlit; deep dive Wednesday with concerns about premature field messaging given major prospects like Sencora. All-hands Tuesday will cover RSA highlights, Forrester/MQ updates, and William Toll recognition. Thursday GTM motion review will examine end-to-end sales costs across stages 0-6. Healthcare ISAC summit sponsorship confirmed with Rafia co-presenting. Anya ramping well as new hire; Northeastern recruiting continues.",
+      "tags": [
+        "ELT",
+        "leadership",
+        "RSA",
+        "Illumio",
+        "Aruba",
+        "PIOT",
+        "GTM",
+        "Forrester",
+        "Gartner-MQ",
+        "Healthcare-ISAC",
+        "hiring",
+        "strategy"
+      ],
+      "action_items": [
+        {
+          "description": "Prepare all-hands slides for Tuesday: RSA highlights, photos, Forrester Wave/MQ update, William Toll recognition",
+          "owner": "Charlie",
+          "priority": "high",
+          "due_date": "2026-03-31"
+        },
+        {
+          "description": "Follow up on Illumio partnership discussion \u2014 develop position and have deeper conversation with Charlie before responding to Andrew",
+          "owner": "James",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Compile list of accounts where Illumio is installed or was evaluated and disqualified from Salesforce",
+          "owner": "Charlie",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Lead Aruba CX deep dive with engineering team on Wednesday to scope architecture and effort",
+          "owner": "Brent",
+          "priority": "high",
+          "due_date": "2026-04-01"
+        },
+        {
+          "description": "Present end-to-end GTM sales motion review on Thursday with Charlie, Dan, Chris, and Ryan \u2014 include fully loaded cost metrics",
+          "owner": "Charlie",
+          "priority": "high",
+          "due_date": "2026-04-02"
+        },
+        {
+          "description": "Run point on Healthcare ISAC summit sponsorship \u2014 coordinate with Jason on event details and venue",
+          "owner": "Charlie",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Complete RSA debrief this afternoon \u2014 document everything and plan follow-ups",
+          "owner": "James",
+          "priority": "high",
+          "due_date": "2026-03-30"
+        },
+        {
+          "description": "Review demo environments with Taylor this afternoon and address Dan/Jason feedback on larger demo needs",
+          "owner": "Brent",
+          "priority": "medium",
+          "due_date": "2026-03-30"
+        }
+      ],
+      "starred": false,
+      "slack_threads": [
+        {
+          "channel": "Group DM (James, Charlie, Brent, Pete)",
+          "ts": "56245943-02-07",
+          "permalink": "",
+          "summary": "Charlie shared Salesforce list of accounts with Illumio installed: Edwards Lifesciences, EECOL, FedEx, Florida Blue, M&T Bank, Marsh, Pilot Flying J, Skechers, U of Kansas Health System, UPS, WakeMed"
+        },
+        {
+          "channel": "#cust-colgate-palmolive",
+          "ts": "56245388-10-07",
+          "permalink": "",
+          "summary": "James: Alex (CISO) nominated Rafia to co-present at RH-ISAC summit in Austin on modern segmentation approach; 6-7 other members have segmentation as a priority this year"
+        },
+        {
+          "channel": "#gtm-weekly-creator-presenters",
+          "ts": "56245958-10-09",
+          "permalink": "",
+          "summary": "Tricia asking Charlie to confirm presenting Sales Stage Leadership Communication slides for GTM meeting"
+        }
+      ]
+    },
     {
       "id": "mtg-019",
       "title": "LPA Aruba CX Deep-Dive (Miha & Jesse)",
