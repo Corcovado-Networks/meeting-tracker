@@ -1,6 +1,101 @@
 {
-  "last_sync": "2026-03-31T12:30:00Z",
+  "last_sync": "2026-03-31T15:30:00Z",
   "meetings": [
+    {
+      "id": "mtg-024",
+      "title": "Elisity/Alcami Quarterly Business Review",
+      "date": "2026-03-31T14:03:00Z",
+      "duration_minutes": 58,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Elisity-Alcami---Quarterly-Business-Review-and-Partnership-Discussion--019d4510a953710eb5d89d530600e478",
+      "participants": [
+        "Pete",
+        "Brent",
+        "Cody",
+        "Brian",
+        "Sean"
+      ],
+      "talk_time": {
+        "Brian": 57,
+        "Pete": 39,
+        "Cody": 3
+      },
+      "key_points": [
+        "First official Elisity/Alcami quarterly business review — deployment going very well with Cody and Paul leading the customer engagement.",
+        "Alcami expansion discussion: New England pharma storage division has limited segmentation needs (warehouse already on locked-down wireless VLAN with SAP-connected tablets and scanners); validation services more similar to lab with equipment to segment.",
+        "ServiceNow explored as trusted data source — could replace the Simple Instruments custom connector currently used for lab instrument policy matching; Cheyenne providing input for policy match criteria.",
+        "RDU site infrastructure just built out — Yancy and Sean scheduled to finish building policy groups for RDU tomorrow using new template-based approach.",
+        "Template-based policy group approach adopted to simplify new site deployments; initial Wilmington and other sites could be retrofitted to match.",
+        "Policy group design leverages intentional fall-through from local PGs into global PGs for asset visibility — credited to Paul's design work, being adopted as a pattern for future deployments.",
+        "Switch onboarding process for expansion sites discussed as part of the growth roadmap.",
+        "Product roadmap review presented by Brent (product lead) and Pete (CX/deployment lead); same product slides used as Valley Health QBR."
+      ],
+      "summary": "First official Elisity/Alcami quarterly business review with Pete (CX lead), Brent (product), Cody (account manager), and Brian and Sean from Alcami. Deployment is going well under Cody and Paul's leadership. Discussed expansion to New England pharma storage (limited needs — warehouse already locked down) and RDU site (PGs being built by Yancy and Sean tomorrow). Explored ServiceNow as a trusted data source to replace the Simple Instruments custom connector for lab policy matching. Adopted a template-based policy group approach for new site rollouts. Paul's local-to-global PG fall-through design praised and being standardized. Product roadmap reviewed.",
+      "tags": [
+        "QBR",
+        "customer",
+        "Alcami",
+        "deployment",
+        "expansion",
+        "ServiceNow",
+        "policy-groups",
+        "external"
+      ],
+      "action_items": [
+        {
+          "description": "Finish building out policy groups for RDU site using template-based approach",
+          "owner": "Yancy",
+          "priority": "high",
+          "due_date": "2026-04-01"
+        },
+        {
+          "description": "Explore ServiceNow as trusted data source to potentially replace Simple Instruments custom connector for Alcami lab instruments",
+          "owner": "Cody",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Evaluate New England pharma storage division for segmentation needs beyond current wireless VLAN lockdown",
+          "owner": "Brian",
+          "priority": "low",
+          "due_date": null
+        },
+        {
+          "description": "Apply template-based PG approach to new site rollouts and consider retrofitting Wilmington site PGs",
+          "owner": "Pete",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Add Q3 through Q1 2027 objectives to the Alcami QBR deck",
+          "owner": "Cody",
+          "priority": "high",
+          "due_date": "2026-03-31"
+        }
+      ],
+      "slack_threads": [
+        {
+          "channel": "#cust-alcami",
+          "summary": "Cody posted the Alcami QBR Mar 31 2026 deck link and noted he's adding Q3 through Q1 2027 objectives",
+          "relevance": "QBR deck shared ahead of the meeting"
+        },
+        {
+          "channel": "DM: Brent/Cody",
+          "summary": "Cody told Brent he posted QBR deck to channel, pulled in same product slides from Valley Health — update as needed",
+          "relevance": "Product slides coordination before QBR"
+        },
+        {
+          "channel": "#cust-alcami",
+          "summary": "Marin flagged Alcami policy view degradation in CCC related to ENG-22719 incident",
+          "relevance": "Active support issue with Alcami environment"
+        },
+        {
+          "channel": "#eng-22916-ve-netflow-drops",
+          "summary": "Alcami affected by VE netflow packet drops issue — still seeing flow drops on VE 1",
+          "relevance": "Ongoing engineering issue affecting Alcami deployment"
+        }
+      ]
+    },
     {
       "id": "mtg-022",
       "title": "Review Behavioral Identity Roadmap",
