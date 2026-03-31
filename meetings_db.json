@@ -1,6 +1,124 @@
 {
-  "last_sync": "2026-03-30T16:00:00Z",
+  "last_sync": "2026-03-31T12:30:00Z",
   "meetings": [
+    {
+      "id": "mtg-022",
+      "title": "Review Behavioral Identity Roadmap",
+      "date": "2026-03-31T11:32:00Z",
+      "duration_minutes": 34,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Review-Behavioral-Identity-Roadmap--019d4486ae3a71dd8cb4bb6f85e5d0c4",
+      "participants": [
+        "Brent",
+        "Taylor"
+      ],
+      "talk_time": {
+        "Brent": 72,
+        "Taylor": 28
+      },
+      "key_points": [
+        "Behavioral identity strategy framed around three core problem statements: unclassifiable devices, identity decay, and customer demand for better device clarity (e.g., Stanley Black & Decker).",
+        "Vision to use traffic analytics capabilities to enrich identity \u2014 explicitly not becoming NDR or threat detection; focus is on enriching identity as it exists today.",
+        "Phased go-to-market approach: enterprise CPS replacement first, then healthcare IoMT, then manufacturing \u2014 each requires specialized databases and protocol understanding.",
+        "Four anomaly detection use cases built by Sergey: DDoS attack, attacker/victim port scanning, and C2 \u2014 using isolation forest and Z-score ML mechanisms.",
+        "AI agent detection proposed as use case \u2014 detecting non-human identities behaving as AI agents, determining sanctioned vs non-sanctioned, registered vs non-registered.",
+        "CPS replacement positioning requires careful messaging \u2014 James aligned on strategic direction but must navigate existing CPS vendor partnerships (Armis valued at $7.7B sets high bar).",
+        "Pillar reordering agreed: CX-oriented use cases (device conformity, behavior gaps) promoted to A/B; advanced anomaly use cases moved to C/D.",
+        "Pavel's Jupyter notebook running against Cardinal Glass, MSK, and Halion customer data \u2014 Brent now has access to review anomaly detection results.",
+        "Common ML processing pipeline being built by Sergey \u2014 two teams now combining efforts into unified approach.",
+        "Non-human identity talk track identified as needed addition to the roadmap deck."
+      ],
+      "summary": "Deep strategy session between Brent and Taylor reviewing the behavioral identity roadmap deck slide-by-slide before presenting to James. Defined three problem statements (unclassifiable devices, identity decay, customer demand for clarity) and a phased approach starting with enterprise CPS replacement. Reviewed four anomaly detection use cases using isolation forest and Z-score ML, discussed AI agent detection for non-human identities, and agreed to reorder pillars to lead with CX-oriented use cases. Sergey building common ML pipeline; Pavel's Jupyter notebooks running against customer data. Next step is another review before taking to James, with careful CPS partnership messaging.",
+      "tags": [
+        "product",
+        "strategy",
+        "behavioral-identity",
+        "ML",
+        "anomaly-detection",
+        "CPS",
+        "roadmap",
+        "internal"
+      ],
+      "action_items": [
+        {
+          "description": "Update behavioral identity roadmap slides with reordered pillars and refined CPS replacement messaging",
+          "owner": "Brent",
+          "priority": "high",
+          "due_date": "2026-03-31"
+        },
+        {
+          "description": "Add dedicated slide for use case one (CPS replacement) and retool anomaly detection line of thought",
+          "owner": "Taylor",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Review and make sense of Pavel's Jupyter notebook anomaly detection results from Cardinal Glass, MSK, and Halion",
+          "owner": "Brent",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Schedule follow-up review of behavioral identity deck before James presentation",
+          "owner": "Brent",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Add non-human identity talk track to behavioral identity roadmap",
+          "owner": "Brent",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "slack_threads": [
+        {
+          "channel": "#eng-reporting",
+          "summary": "Zero Trust Posture Dashboard demo to Gartner went well \u2014 discussed specificity to zones/conduits and customizable MITRE list for industrial tenants",
+          "relevance": "Related to zero trust dashboard behavioral aspects discussed in roadmap"
+        }
+      ]
+    },
+    {
+      "id": "mtg-023",
+      "title": "Elisity All-Hands",
+      "date": "2026-03-31T09:59:00Z",
+      "duration_minutes": 62,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Elisity-All-Hands--019d4431d3a470e4a727b1ea00cab662",
+      "participants": [
+        "James",
+        "Dana",
+        "Mike",
+        "Jared",
+        "Esther",
+        "Company-wide"
+      ],
+      "talk_time": {
+        "Dana": 40,
+        "James": 33,
+        "Mike": 14,
+        "Jared": 8,
+        "Esther": 3
+      },
+      "key_points": [
+        "March 31st company All-Hands \u2014 quarter of the way through CY 2026, 16.67% through fiscal year 27; 63 attendees on the call.",
+        "New CX team members welcomed: Kia (Texas-based, former Federal Reserve/Pepsi/CDW security team \u2014 part of the 'Milwaukee Mafia') and Ryan (Boston office, former BD manager at LaunchDarkly, channel manager at IntelliCare, joined GTM leadership).",
+        "Jacob Anderson joining as second ops leader to strengthen security posture \u2014 elastic expert starting with SIEM straightening.",
+        "Dana reported 960 graphs across metrics dashboards.",
+        "Recording captured only the first ~5 minutes of introductions; full meeting content not available in transcript."
+      ],
+      "summary": "Elisity company-wide All-Hands for March 31st with 63 attendees. James opened noting Q1 CY2026 completion and 16.67% through FY27. Meeting began with new team member introductions: Kia and Ryan joining CX/GTM teams, and Jacob Anderson joining as second ops leader (elastic/SIEM expert). Dana referenced 960 graphs across metrics. Note: Krisp only captured the first ~5 minutes of the 62-minute meeting (introductions portion).",
+      "tags": [
+        "all-hands",
+        "company-wide",
+        "new-hires",
+        "quarterly-update",
+        "internal"
+      ],
+      "action_items": [],
+      "slack_threads": []
+    },
     {
       "id": "mtg-021",
       "title": "Product & UX Strategy Review",
@@ -22,12 +140,12 @@
       },
       "key_points": [
         "Policy group hierarchy deep-dive: five levels deep with five sub-levels, sub-PG communication rules across color lines (red/green), and more-specific-match-wins precedence for allow/deny/custom policies.",
-        "Tag vs STT naming decision — team aligned on using 'tags' as the standard terminology going forward; Jacob and Taylor have iterated on this for three years.",
-        "Zero trust dashboard documentation — exec summit overview section already exists, adding zero trust content and Elisity Intelligence section with insights on policies, devices, and Elisity Assistant.",
-        "Saved filters UX phase one — Irina presented new filter section with visible dropdowns, saved filters, and ability to reapply last applied filter or save connector-specific filters.",
-        "Behavioral aspects card planned for zero trust dashboard — review with Brent scheduled for tomorrow, will cross-link to dashboards.",
-        "Seed document for TDM and AI slide deck — need to finalize and publish, can be repurposed as presentation content.",
-        "Helion customer concern — Dave flagged concerns about sharing certain content externally; paused that discussion for now but will revisit longer term."
+        "Tag vs STT naming decision \u2014 team aligned on using 'tags' as the standard terminology going forward; Jacob and Taylor have iterated on this for three years.",
+        "Zero trust dashboard documentation \u2014 exec summit overview section already exists, adding zero trust content and Elisity Intelligence section with insights on policies, devices, and Elisity Assistant.",
+        "Saved filters UX phase one \u2014 Irina presented new filter section with visible dropdowns, saved filters, and ability to reapply last applied filter or save connector-specific filters.",
+        "Behavioral aspects card planned for zero trust dashboard \u2014 review with Brent scheduled for tomorrow, will cross-link to dashboards.",
+        "Seed document for TDM and AI slide deck \u2014 need to finalize and publish, can be repurposed as presentation content.",
+        "Helion customer concern \u2014 Dave flagged concerns about sharing certain content externally; paused that discussion for now but will revisit longer term."
       ],
       "summary": "Deep product and UX strategy session with Brent, Taylor, Dana, and Irina covering policy group hierarchy design (five sub-levels with more-specific-match-wins precedence), alignment on 'tags' terminology over STT, zero trust dashboard enhancements including an Elisity Intelligence section, and Irina's saved filters UX for phase one. Also discussed the seed document for TDM/AI deck, behavioral dashboard card review planned for tomorrow, and paused Helion external-sharing discussion per Dave's concerns.",
       "tags": [
@@ -88,14 +206,14 @@
         "Speaker 5": 0
       },
       "key_points": [
-        "AI-driven development now in production at Elisity — first team to achieve end-to-end agentic workflow with two human-in-the-loop checkpoints: spec approval via GitHub comments, then code review. AI writes requirements and executes plans autonomously between checkpoints.",
-        "Cisco competitive dynamics — Cisco Catalyst Center endpoint analytics seen as copying Elisity's approach; team discussed Elisity's platform-agnostic differentiation vs Cisco's single-vendor lock-in.",
+        "AI-driven development now in production at Elisity \u2014 first team to achieve end-to-end agentic workflow with two human-in-the-loop checkpoints: spec approval via GitHub comments, then code review. AI writes requirements and executes plans autonomously between checkpoints.",
+        "Cisco competitive dynamics \u2014 Cisco Catalyst Center endpoint analytics seen as copying Elisity's approach; team discussed Elisity's platform-agnostic differentiation vs Cisco's single-vendor lock-in.",
         "Pipeline review: currently at ~$2.95M (28-29 range), quarter target of $4.9M. End-of-quarter pipeline expected to trim weekly as deals push out or close.",
         "Sanford deal: PO expected this week via Evolving/Brittany; Dave resolved remaining blockers. Close date likely this month as contract expires in May. Would bring numbers from ~$6M to ~$7M range.",
-        "Ferragamo contact leaving but presenting three-year plan to CIO that includes Elisity — need to influence that plan before it gets locked in.",
+        "Ferragamo contact leaving but presenting three-year plan to CIO that includes Elisity \u2014 need to influence that plan before it gets locked in.",
         "Stanley Black & Decker account transitioned to Stephanie; Pete and Charlie running point until sorted.",
         "All-hands slides to be reviewed this afternoon by Charlie, will reach out individually if questions.",
-        "BT needs to be pulled into USAT conversation related to hospitals and Sanford — Charlie confirmed it's on his list."
+        "BT needs to be pulled into USAT conversation related to hospitals and Sanford \u2014 Charlie confirmed it's on his list."
       ],
       "summary": "ELT weekly leadership call covering AI development milestones (first agentic workflow in production with human-in-the-loop), Cisco competitive positioning (Catalyst Center seen as copying Elisity), and detailed pipeline review. Sanford PO expected this week via Evolving which would significantly boost Q1 numbers. Ferragamo's departing contact including Elisity in three-year CIO plan presents a time-sensitive influence opportunity. Stanley Black & Decker transitioned to new owner. All-hands slides being finalized, and BT being pulled into USAT hospital conversation.",
       "tags": [
@@ -1819,13 +1937,13 @@
   "slack_threads": [
     {
       "channel": "#elisity-elt",
-      "summary": "Brent shared Cisco Catalyst Center endpoint analytics documentation link — the competitive reference point discussed in the ELT call about Cisco copying Elisity's approach.",
+      "summary": "Brent shared Cisco Catalyst Center endpoint analytics documentation link \u2014 the competitive reference point discussed in the ELT call about Cisco copying Elisity's approach.",
       "meeting_title": "ELT Weekly Call",
       "date": "2026-03-30"
     },
     {
       "channel": "#eng-claude-code",
-      "summary": "Michal Kolodziej announced Ralph Agent for flows-service working end-to-end in production — the AI agentic workflow milestone referenced in the ELT call.",
+      "summary": "Michal Kolodziej announced Ralph Agent for flows-service working end-to-end in production \u2014 the AI agentic workflow milestone referenced in the ELT call.",
       "meeting_title": "ELT Weekly Call",
       "date": "2026-03-30"
     },
@@ -1837,7 +1955,7 @@
     },
     {
       "channel": "#team-eng-all",
-      "summary": "Piotr Kupisiewicz announced Frontend team now reporting to Piotr Cholewczuk, citing AI revolution alignment — relates to the product/UX strategy and AI development themes from both meetings.",
+      "summary": "Piotr Kupisiewicz announced Frontend team now reporting to Piotr Cholewczuk, citing AI revolution alignment \u2014 relates to the product/UX strategy and AI development themes from both meetings.",
       "meeting_title": "Product & UX Strategy Review",
       "date": "2026-03-30"
     },
