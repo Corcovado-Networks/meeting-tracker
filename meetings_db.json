@@ -1,6 +1,190 @@
 {
-  "last_sync": "2026-03-31T15:30:00Z",
+  "last_sync": "2026-04-01T18:30:00Z",
   "meetings": [
+    {
+      "id": "mtg-025",
+      "title": "Workloads Sync Up",
+      "date": "2026-04-01T18:00:00Z",
+      "duration_minutes": 59,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Workloads-sync-up---019d498fb0217504b9e7bb78cd7289ed",
+      "participants": ["Brent", "Bill", "Miha", "Chaku"],
+      "talk_time": {
+        "Miha": 42,
+        "Chaku": 30,
+        "Bill": 28
+      },
+      "key_points": [
+        "Follow-up from previous workloads architecture meeting — structured presentation of cloud workloads proposal for Elisity platform.",
+        "Proposal for two types of policy groups: device PGs (existing) and workload PGs with cloud-specific matching criteria (provider, tags, interface attributes).",
+        "Workload interfaces classified into PGs — most internal interfaces won't be important; focus on key production/management interfaces.",
+        "Hierarchical/nested policy group concept proposed by Chaku — sub-groups inherit matching criteria from parent groups for more granular workload segmentation.",
+        "Discussion of hardware support: 9500 switches, potential ASR support, and Palo Alto firewall integration considerations.",
+        "ITD propagation concerns for workload IP addresses across campus switches in large deployments.",
+        "Proposal kept intentionally simple with no additional dependencies — more advanced features can be added in future phases."
+      ],
+      "summary": "Workloads architecture sync with Miha, Bill, and Chaku. Miha presented a structured proposal for cloud workload policy groups as a new PG type alongside existing device PGs, with matching criteria based on cloud provider, tags, and interface attributes. Chaku proposed a hierarchical PG model where sub-groups inherit parent matching criteria. Discussed hardware support scope (9500, ASR, Palo Alto) and ITD propagation challenges. The team agreed on a simple initial proposal with no extra dependencies.",
+      "tags": ["workloads", "engineering", "architecture", "policy-groups", "cloud", "internal"],
+      "action_items": [
+        {
+          "description": "Continue refining workload PG proposal with minimal dependencies for initial implementation",
+          "owner": "Miha",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Evaluate hierarchical/nested policy group concept for workload segmentation",
+          "owner": "Chaku",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Determine supported hardware platforms for workload policy enforcement (9500, ASR, firewalls)",
+          "owner": "Brent",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "slack_threads": [
+        {
+          "channel": "DM: Brent/Michal",
+          "summary": "Michal shared workloads call proposal SharePoint deck ahead of meeting",
+          "relevance": "Pre-meeting preparation and proposal document"
+        },
+        {
+          "channel": "DM: Brent/Michal",
+          "summary": "Brent and Michal troubleshooting Aruba lab — CoA issues, old GBP config conflicts, jump box setup for testing",
+          "relevance": "Active Aruba integration testing related to workloads effort"
+        },
+        {
+          "channel": "#eng-upgrades",
+          "summary": "Piotr B raised Kafka topic race condition between policy.deviceState.v2 and policy.configurationState — IG does not consume configurationState",
+          "relevance": "Policy service architecture relevant to workload PG implementation"
+        }
+      ]
+    },
+    {
+      "id": "mtg-026",
+      "title": "CTO & Engineering: Weekly Readout",
+      "date": "2026-04-01T17:00:00Z",
+      "duration_minutes": 51,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/CTO-Engineering-Weekly-Readout--019d4958bd9b7791b46e0f2603a7424d",
+      "participants": ["Brent", "Piotr K", "Mike", "Brian", "Dana", "Bill", "Cedric", "Marin", "Rob"],
+      "talk_time": {
+        "Presenter": 42,
+        "CTO": 19,
+        "Support": 13,
+        "Engineering": 11
+      },
+      "key_points": [
+        "April Fools jokes kicked off the call — fake announcements about team departures and 'negative TTPO' metrics using quantum computing.",
+        "RSA conference follow-up: AI/LLM-based vulnerability scanning becoming widespread — open-source code being analyzed with LLMs to find zero-day SQL injection and other vulnerabilities at scale.",
+        "26.4 QA testing metrics reviewed — architecture and scale results presented.",
+        "CCC environment issues: GS gave a Saturday outage (2 hours), ~2% dropped flows; analytics patched with build 3 showing improvement.",
+        "Connector status: new inactive/degraded connectors found — support team to post updates to existing ticket rather than opening new ones.",
+        "Monthly reporting discrepancies between Claude-generated data and ticket system (ticket 20450) — team to align metrics in follow-up call.",
+        "Frontend team now reporting to Piotr Cholewczuk per Piotr Kupisiewicz announcement.",
+        "RBAC for Zero Trust Dashboard PR submitted for 26.3.0 release."
+      ],
+      "summary": "Weekly CTO & Engineering readout. Started with April Fools jokes. Key topics: RSA follow-up on AI-powered vulnerability scanning trends, 26.4 QA metrics review, CCC outage analysis (GS Saturday 2-hour outage, 2% flow drops), analytics build 3 patch improvement, connector health tracking updates. Monthly reporting metrics being reconciled between tools. Frontend team org change announced (now under Piotr Cholewczuk). RBAC for Zero Trust Dashboard submitted for 26.3.0.",
+      "tags": ["CTO", "engineering", "weekly", "metrics", "RSA", "security", "release", "internal"],
+      "action_items": [
+        {
+          "description": "Post connector inactive/degraded updates to existing support ticket instead of new tickets",
+          "owner": "Support",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Reconcile monthly reporting metrics between Claude-generated data and ticket system",
+          "owner": "Marin",
+          "priority": "medium",
+          "due_date": "2026-04-02"
+        },
+        {
+          "description": "Add new tracking fields to ticket system for better categorization of support issues",
+          "owner": "Rob",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "slack_threads": [
+        {
+          "channel": "#team-eng-all",
+          "summary": "Piotr K announced Frontend Team now reports to Piotr Cholewczuk — driven by AI alignment needs",
+          "relevance": "Org change announced during the weekly readout"
+        },
+        {
+          "channel": "#eng-reporting",
+          "summary": "Bill reported Zero Trust Posture Dashboard demo to Gartner went well; gaps identified around pivot tables and customizable MITRE list",
+          "relevance": "Zero Trust Dashboard progress discussed in readout"
+        },
+        {
+          "channel": "#release-26-3-0",
+          "summary": "RBAC for Zero Trust Dashboard PR #14353 submitted and approved for 26.3.0; Mike C flagged against using roles as conditional criteria",
+          "relevance": "Release items discussed in engineering readout"
+        }
+      ]
+    },
+    {
+      "id": "mtg-027",
+      "title": "Aruba LPA Architecture Review",
+      "date": "2026-04-01T15:00:00Z",
+      "duration_minutes": 102,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Brent-Colwell-Elisity-s-Personal-Meeting-Room--019d48eab20b7318a79939b8cb248373",
+      "participants": ["Brent", "Paul", "Cedric", "Miha", "Josh", "Rupa", "Chaku", "Mark"],
+      "talk_time": {
+        "Brent": 55,
+        "Paul": 30,
+        "Cedric": 10,
+        "Others": 5
+      },
+      "key_points": [
+        "Discussion of MAB (MAC Authentication Bypass) behavior — whether to enable on AP interfaces, phone ports, and wireless connections; detection of device types to determine interface configuration.",
+        "Aruba policy structure deep dive: classes as reusable objects vs traditional ACLs, Radius role assignment, and how Aruba structures differ from Cisco.",
+        "LPA (Least Privilege Access) on legacy switches — how to push access lists to switches that don't support TrustSec/SGT.",
+        "Proposal: add LPA access list profile to policy group configuration — similar to how default security profile works today but for legacy enforcement.",
+        "Scenario walkthrough: device on TrustSec WLC gets matrix-based segmentation; same device on legacy switch gets ACL-based LPA profile pushed instead.",
+        "Discussion of whether LPA policies should be source-only or support destination-based/location-based policy sets.",
+        "Cedric raised question about Aruba class vs Radius role relationship — classes compose reusable matching objects that build into role policies."
+      ],
+      "summary": "Architecture review of Aruba LPA (Least Privilege Access) for legacy switch support. Brent led the discussion on MAB behavior for different device types (APs, phones, wireless), Aruba policy structure (classes vs ACLs), and how to deliver segmentation on switches without TrustSec. Key proposal: add an LPA profile to policy group config so legacy switches get ACL-based enforcement while TrustSec switches use matrix-based segmentation. Paul contributed design patterns for PG-level LPA configuration. Cedric asked about Aruba class/role relationships.",
+      "tags": ["LPA", "Aruba", "engineering", "architecture", "MAB", "legacy-switches", "policy-groups", "internal"],
+      "action_items": [
+        {
+          "description": "Design LPA profile integration into policy group configuration alongside existing security profiles",
+          "owner": "Brent",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Continue Aruba lab testing — resolve CoA issues and validate MAB authentication flows",
+          "owner": "Miha",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Evaluate whether LPA policies need destination/location-based policy set support or source-only",
+          "owner": "Cedric",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "slack_threads": [
+        {
+          "channel": "DM: Brent/Michal",
+          "summary": "Extensive Aruba lab troubleshooting — CoA not working correctly, old GBP config conflicting with new policy, jump box disconnection during testing",
+          "relevance": "Active lab testing directly supporting the LPA architecture being reviewed"
+        },
+        {
+          "channel": "#eng-ve16-support",
+          "summary": "Michal confirmed Radius and LPA work in progress, should not impact SDU upgrades",
+          "relevance": "LPA development status update"
+        }
+      ]
+    },
     {
       "id": "mtg-024",
       "title": "Elisity/Alcami Quarterly Business Review",
