@@ -1,6 +1,77 @@
 {
-  "last_sync": "2026-04-01T18:30:00Z",
+  "last_sync": "2026-04-01T21:30:00Z",
   "meetings": [
+    {
+      "id": "mtg-028",
+      "title": "Workloads convo with MARSH (Matthew) and our PM Lead (Dana)",
+      "date": "2026-04-01T19:00:00Z",
+      "duration_minutes": 12,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Workloads-convo-with-MARSH-Matthew-and-our-PM-Lead-Dana---019d49c6fedd71ebb8d6127606bedcdb",
+      "participants": [
+        "Brent",
+        "Dana",
+        "Matthew Elphick"
+      ],
+      "talk_time": {
+        "Dana": 45,
+        "Matthew": 39,
+        "Brent": 16
+      },
+      "key_points": [
+        "Customer discovery call with Matthew Elphick from MARSH to gather cloud workload requirements for Elisity's new workloads feature \u2014 part of ongoing punch list of questions collected from multiple customers.",
+        "Follow-ups from previous MARSH engagement reviewed: Ralph working through punch list with Matthew and Steve's team; one item still needs scheduling; another item Ralph confirmed should be complete in 2026.",
+        "MARSH has WCO in all phase two sites which will carry into phase three \u2014 approximately 580 sites now, targeting 2,600 by end of year on the new wireless plan/phase three policy.",
+        "MARSH multi-cloud environment: primary CSP is AWS (EC2 instances, VMs, OSS2 managed Kubernetes platform), Azure (Databricks, data pipelines), OCI (Oracle applications, backend VM systems), Oracle on AWS, and GCP (Apigee X for API/security API management).",
+        "Cloud vs on-prem ratio currently migrating toward 80% cloud / 20% on-prem within about a year; distribution roughly 60% AWS, 30% Azure, remainder OCI and GCP.",
+        "Dana began workloads discovery Q&A \u2014 asked about connectivity patterns between on-prem devices (already secured with Elisity) and cloud workloads, and most common traffic patterns (cloud-to-cloud vs on-prem-to-cloud).",
+        "Call cut short \u2014 Matthew received an AWS incident alert and had to leave to join an emergency call; meeting to be rescheduled to continue the workloads deep dive."
+      ],
+      "summary": "Customer discovery call with Matthew Elphick from MARSH and PM Lead Dana Yanch to gather cloud workload requirements for Elisity's new workloads feature. Reviewed follow-ups from prior MARSH engagement (Ralph's punch list progress, WCO phase three rollout to 2,600 sites). Matthew detailed MARSH's multi-cloud environment: AWS primary (EC2, Kubernetes), Azure (Databricks), OCI (Oracle apps), GCP (Apigee X). Target 80/20 cloud-to-on-prem split. Dana started workloads discovery questionnaire but call was cut short when Matthew had to respond to an AWS incident. Meeting to be rescheduled.",
+      "tags": [
+        "workloads",
+        "customer-discovery",
+        "MARSH",
+        "cloud",
+        "multi-CSP",
+        "AWS",
+        "Azure",
+        "product",
+        "external"
+      ],
+      "action_items": [
+        {
+          "description": "Reschedule workloads deep-dive session with Matthew Elphick (MARSH) to continue discovery Q&A",
+          "owner": "Dana",
+          "priority": "high",
+          "due_date": null
+        },
+        {
+          "description": "Ensure Ralph completes outstanding punch list items with Matthew and Steve's team at MARSH",
+          "owner": "Brent",
+          "priority": "medium",
+          "due_date": null
+        },
+        {
+          "description": "Compile MARSH cloud environment details (multi-CSP, workload types, traffic patterns) into workloads requirements doc",
+          "owner": "Dana",
+          "priority": "medium",
+          "due_date": null
+        }
+      ],
+      "slack_threads": [
+        {
+          "channel": "DM: Brent/Pete",
+          "summary": "Pete mentioned upcoming deep dive session with Matthew Elphick and Dana on Workloads at 12 noon; Brent confirmed and asked for calendar invite",
+          "relevance": "Pre-meeting coordination for this workloads customer call"
+        },
+        {
+          "channel": "#product-team",
+          "summary": "Dana discussing workloads availability and scheduling with Bill, confirming she can work during recovery considering time zone differences",
+          "relevance": "Dana's workloads engagement scheduling context"
+        }
+      ]
+    },
     {
       "id": "mtg-025",
       "title": "Workloads Sync Up",
@@ -8,23 +79,35 @@
       "duration_minutes": 59,
       "source": "krisp",
       "source_url": "https://app.krisp.ai/t/Workloads-sync-up---019d498fb0217504b9e7bb78cd7289ed",
-      "participants": ["Brent", "Bill", "Miha", "Chaku"],
+      "participants": [
+        "Brent",
+        "Bill",
+        "Miha",
+        "Chaku"
+      ],
       "talk_time": {
         "Miha": 42,
         "Chaku": 30,
         "Bill": 28
       },
       "key_points": [
-        "Follow-up from previous workloads architecture meeting — structured presentation of cloud workloads proposal for Elisity platform.",
+        "Follow-up from previous workloads architecture meeting \u2014 structured presentation of cloud workloads proposal for Elisity platform.",
         "Proposal for two types of policy groups: device PGs (existing) and workload PGs with cloud-specific matching criteria (provider, tags, interface attributes).",
-        "Workload interfaces classified into PGs — most internal interfaces won't be important; focus on key production/management interfaces.",
-        "Hierarchical/nested policy group concept proposed by Chaku — sub-groups inherit matching criteria from parent groups for more granular workload segmentation.",
+        "Workload interfaces classified into PGs \u2014 most internal interfaces won't be important; focus on key production/management interfaces.",
+        "Hierarchical/nested policy group concept proposed by Chaku \u2014 sub-groups inherit matching criteria from parent groups for more granular workload segmentation.",
         "Discussion of hardware support: 9500 switches, potential ASR support, and Palo Alto firewall integration considerations.",
         "ITD propagation concerns for workload IP addresses across campus switches in large deployments.",
-        "Proposal kept intentionally simple with no additional dependencies — more advanced features can be added in future phases."
+        "Proposal kept intentionally simple with no additional dependencies \u2014 more advanced features can be added in future phases."
       ],
       "summary": "Workloads architecture sync with Miha, Bill, and Chaku. Miha presented a structured proposal for cloud workload policy groups as a new PG type alongside existing device PGs, with matching criteria based on cloud provider, tags, and interface attributes. Chaku proposed a hierarchical PG model where sub-groups inherit parent matching criteria. Discussed hardware support scope (9500, ASR, Palo Alto) and ITD propagation challenges. The team agreed on a simple initial proposal with no extra dependencies.",
-      "tags": ["workloads", "engineering", "architecture", "policy-groups", "cloud", "internal"],
+      "tags": [
+        "workloads",
+        "engineering",
+        "architecture",
+        "policy-groups",
+        "cloud",
+        "internal"
+      ],
       "action_items": [
         {
           "description": "Continue refining workload PG proposal with minimal dependencies for initial implementation",
@@ -53,12 +136,12 @@
         },
         {
           "channel": "DM: Brent/Michal",
-          "summary": "Brent and Michal troubleshooting Aruba lab — CoA issues, old GBP config conflicts, jump box setup for testing",
+          "summary": "Brent and Michal troubleshooting Aruba lab \u2014 CoA issues, old GBP config conflicts, jump box setup for testing",
           "relevance": "Active Aruba integration testing related to workloads effort"
         },
         {
           "channel": "#eng-upgrades",
-          "summary": "Piotr B raised Kafka topic race condition between policy.deviceState.v2 and policy.configurationState — IG does not consume configurationState",
+          "summary": "Piotr B raised Kafka topic race condition between policy.deviceState.v2 and policy.configurationState \u2014 IG does not consume configurationState",
           "relevance": "Policy service architecture relevant to workload PG implementation"
         }
       ]
@@ -70,7 +153,17 @@
       "duration_minutes": 51,
       "source": "krisp",
       "source_url": "https://app.krisp.ai/t/CTO-Engineering-Weekly-Readout--019d4958bd9b7791b46e0f2603a7424d",
-      "participants": ["Brent", "Piotr K", "Mike", "Brian", "Dana", "Bill", "Cedric", "Marin", "Rob"],
+      "participants": [
+        "Brent",
+        "Piotr K",
+        "Mike",
+        "Brian",
+        "Dana",
+        "Bill",
+        "Cedric",
+        "Marin",
+        "Rob"
+      ],
       "talk_time": {
         "Presenter": 42,
         "CTO": 19,
@@ -78,17 +171,26 @@
         "Engineering": 11
       },
       "key_points": [
-        "April Fools jokes kicked off the call — fake announcements about team departures and 'negative TTPO' metrics using quantum computing.",
-        "RSA conference follow-up: AI/LLM-based vulnerability scanning becoming widespread — open-source code being analyzed with LLMs to find zero-day SQL injection and other vulnerabilities at scale.",
-        "26.4 QA testing metrics reviewed — architecture and scale results presented.",
+        "April Fools jokes kicked off the call \u2014 fake announcements about team departures and 'negative TTPO' metrics using quantum computing.",
+        "RSA conference follow-up: AI/LLM-based vulnerability scanning becoming widespread \u2014 open-source code being analyzed with LLMs to find zero-day SQL injection and other vulnerabilities at scale.",
+        "26.4 QA testing metrics reviewed \u2014 architecture and scale results presented.",
         "CCC environment issues: GS gave a Saturday outage (2 hours), ~2% dropped flows; analytics patched with build 3 showing improvement.",
-        "Connector status: new inactive/degraded connectors found — support team to post updates to existing ticket rather than opening new ones.",
-        "Monthly reporting discrepancies between Claude-generated data and ticket system (ticket 20450) — team to align metrics in follow-up call.",
+        "Connector status: new inactive/degraded connectors found \u2014 support team to post updates to existing ticket rather than opening new ones.",
+        "Monthly reporting discrepancies between Claude-generated data and ticket system (ticket 20450) \u2014 team to align metrics in follow-up call.",
         "Frontend team now reporting to Piotr Cholewczuk per Piotr Kupisiewicz announcement.",
         "RBAC for Zero Trust Dashboard PR submitted for 26.3.0 release."
       ],
       "summary": "Weekly CTO & Engineering readout. Started with April Fools jokes. Key topics: RSA follow-up on AI-powered vulnerability scanning trends, 26.4 QA metrics review, CCC outage analysis (GS Saturday 2-hour outage, 2% flow drops), analytics build 3 patch improvement, connector health tracking updates. Monthly reporting metrics being reconciled between tools. Frontend team org change announced (now under Piotr Cholewczuk). RBAC for Zero Trust Dashboard submitted for 26.3.0.",
-      "tags": ["CTO", "engineering", "weekly", "metrics", "RSA", "security", "release", "internal"],
+      "tags": [
+        "CTO",
+        "engineering",
+        "weekly",
+        "metrics",
+        "RSA",
+        "security",
+        "release",
+        "internal"
+      ],
       "action_items": [
         {
           "description": "Post connector inactive/degraded updates to existing support ticket instead of new tickets",
@@ -112,7 +214,7 @@
       "slack_threads": [
         {
           "channel": "#team-eng-all",
-          "summary": "Piotr K announced Frontend Team now reports to Piotr Cholewczuk — driven by AI alignment needs",
+          "summary": "Piotr K announced Frontend Team now reports to Piotr Cholewczuk \u2014 driven by AI alignment needs",
           "relevance": "Org change announced during the weekly readout"
         },
         {
@@ -134,7 +236,16 @@
       "duration_minutes": 102,
       "source": "krisp",
       "source_url": "https://app.krisp.ai/t/Brent-Colwell-Elisity-s-Personal-Meeting-Room--019d48eab20b7318a79939b8cb248373",
-      "participants": ["Brent", "Paul", "Cedric", "Miha", "Josh", "Rupa", "Chaku", "Mark"],
+      "participants": [
+        "Brent",
+        "Paul",
+        "Cedric",
+        "Miha",
+        "Josh",
+        "Rupa",
+        "Chaku",
+        "Mark"
+      ],
       "talk_time": {
         "Brent": 55,
         "Paul": 30,
@@ -142,16 +253,25 @@
         "Others": 5
       },
       "key_points": [
-        "Discussion of MAB (MAC Authentication Bypass) behavior — whether to enable on AP interfaces, phone ports, and wireless connections; detection of device types to determine interface configuration.",
+        "Discussion of MAB (MAC Authentication Bypass) behavior \u2014 whether to enable on AP interfaces, phone ports, and wireless connections; detection of device types to determine interface configuration.",
         "Aruba policy structure deep dive: classes as reusable objects vs traditional ACLs, Radius role assignment, and how Aruba structures differ from Cisco.",
-        "LPA (Least Privilege Access) on legacy switches — how to push access lists to switches that don't support TrustSec/SGT.",
-        "Proposal: add LPA access list profile to policy group configuration — similar to how default security profile works today but for legacy enforcement.",
+        "LPA (Least Privilege Access) on legacy switches \u2014 how to push access lists to switches that don't support TrustSec/SGT.",
+        "Proposal: add LPA access list profile to policy group configuration \u2014 similar to how default security profile works today but for legacy enforcement.",
         "Scenario walkthrough: device on TrustSec WLC gets matrix-based segmentation; same device on legacy switch gets ACL-based LPA profile pushed instead.",
         "Discussion of whether LPA policies should be source-only or support destination-based/location-based policy sets.",
-        "Cedric raised question about Aruba class vs Radius role relationship — classes compose reusable matching objects that build into role policies."
+        "Cedric raised question about Aruba class vs Radius role relationship \u2014 classes compose reusable matching objects that build into role policies."
       ],
       "summary": "Architecture review of Aruba LPA (Least Privilege Access) for legacy switch support. Brent led the discussion on MAB behavior for different device types (APs, phones, wireless), Aruba policy structure (classes vs ACLs), and how to deliver segmentation on switches without TrustSec. Key proposal: add an LPA profile to policy group config so legacy switches get ACL-based enforcement while TrustSec switches use matrix-based segmentation. Paul contributed design patterns for PG-level LPA configuration. Cedric asked about Aruba class/role relationships.",
-      "tags": ["LPA", "Aruba", "engineering", "architecture", "MAB", "legacy-switches", "policy-groups", "internal"],
+      "tags": [
+        "LPA",
+        "Aruba",
+        "engineering",
+        "architecture",
+        "MAB",
+        "legacy-switches",
+        "policy-groups",
+        "internal"
+      ],
       "action_items": [
         {
           "description": "Design LPA profile integration into policy group configuration alongside existing security profiles",
@@ -160,7 +280,7 @@
           "due_date": null
         },
         {
-          "description": "Continue Aruba lab testing — resolve CoA issues and validate MAB authentication flows",
+          "description": "Continue Aruba lab testing \u2014 resolve CoA issues and validate MAB authentication flows",
           "owner": "Miha",
           "priority": "high",
           "due_date": null
@@ -175,7 +295,7 @@
       "slack_threads": [
         {
           "channel": "DM: Brent/Michal",
-          "summary": "Extensive Aruba lab troubleshooting — CoA not working correctly, old GBP config conflicting with new policy, jump box disconnection during testing",
+          "summary": "Extensive Aruba lab troubleshooting \u2014 CoA not working correctly, old GBP config conflicting with new policy, jump box disconnection during testing",
           "relevance": "Active lab testing directly supporting the LPA architecture being reviewed"
         },
         {
@@ -205,16 +325,16 @@
         "Cody": 3
       },
       "key_points": [
-        "First official Elisity/Alcami quarterly business review — deployment going very well with Cody and Paul leading the customer engagement.",
+        "First official Elisity/Alcami quarterly business review \u2014 deployment going very well with Cody and Paul leading the customer engagement.",
         "Alcami expansion discussion: New England pharma storage division has limited segmentation needs (warehouse already on locked-down wireless VLAN with SAP-connected tablets and scanners); validation services more similar to lab with equipment to segment.",
-        "ServiceNow explored as trusted data source — could replace the Simple Instruments custom connector currently used for lab instrument policy matching; Cheyenne providing input for policy match criteria.",
-        "RDU site infrastructure just built out — Yancy and Sean scheduled to finish building policy groups for RDU tomorrow using new template-based approach.",
+        "ServiceNow explored as trusted data source \u2014 could replace the Simple Instruments custom connector currently used for lab instrument policy matching; Cheyenne providing input for policy match criteria.",
+        "RDU site infrastructure just built out \u2014 Yancy and Sean scheduled to finish building policy groups for RDU tomorrow using new template-based approach.",
         "Template-based policy group approach adopted to simplify new site deployments; initial Wilmington and other sites could be retrofitted to match.",
-        "Policy group design leverages intentional fall-through from local PGs into global PGs for asset visibility — credited to Paul's design work, being adopted as a pattern for future deployments.",
+        "Policy group design leverages intentional fall-through from local PGs into global PGs for asset visibility \u2014 credited to Paul's design work, being adopted as a pattern for future deployments.",
         "Switch onboarding process for expansion sites discussed as part of the growth roadmap.",
         "Product roadmap review presented by Brent (product lead) and Pete (CX/deployment lead); same product slides used as Valley Health QBR."
       ],
-      "summary": "First official Elisity/Alcami quarterly business review with Pete (CX lead), Brent (product), Cody (account manager), and Brian and Sean from Alcami. Deployment is going well under Cody and Paul's leadership. Discussed expansion to New England pharma storage (limited needs — warehouse already locked down) and RDU site (PGs being built by Yancy and Sean tomorrow). Explored ServiceNow as a trusted data source to replace the Simple Instruments custom connector for lab policy matching. Adopted a template-based policy group approach for new site rollouts. Paul's local-to-global PG fall-through design praised and being standardized. Product roadmap reviewed.",
+      "summary": "First official Elisity/Alcami quarterly business review with Pete (CX lead), Brent (product), Cody (account manager), and Brian and Sean from Alcami. Deployment is going well under Cody and Paul's leadership. Discussed expansion to New England pharma storage (limited needs \u2014 warehouse already locked down) and RDU site (PGs being built by Yancy and Sean tomorrow). Explored ServiceNow as a trusted data source to replace the Simple Instruments custom connector for lab policy matching. Adopted a template-based policy group approach for new site rollouts. Paul's local-to-global PG fall-through design praised and being standardized. Product roadmap reviewed.",
       "tags": [
         "QBR",
         "customer",
@@ -265,7 +385,7 @@
         },
         {
           "channel": "DM: Brent/Cody",
-          "summary": "Cody told Brent he posted QBR deck to channel, pulled in same product slides from Valley Health — update as needed",
+          "summary": "Cody told Brent he posted QBR deck to channel, pulled in same product slides from Valley Health \u2014 update as needed",
           "relevance": "Product slides coordination before QBR"
         },
         {
@@ -275,7 +395,7 @@
         },
         {
           "channel": "#eng-22916-ve-netflow-drops",
-          "summary": "Alcami affected by VE netflow packet drops issue — still seeing flow drops on VE 1",
+          "summary": "Alcami affected by VE netflow packet drops issue \u2014 still seeing flow drops on VE 1",
           "relevance": "Ongoing engineering issue affecting Alcami deployment"
         }
       ]
@@ -2206,6 +2326,45 @@
       "completed_date": null,
       "priority": "medium",
       "notes": "CX team flagged that current workflow requires navigating to a specific step to finish \u2014 adding finish action at each step"
+    },
+    {
+      "id": "ai-048",
+      "meeting_id": "mtg-028",
+      "meeting_title": "Workloads convo with MARSH (Matthew) and our PM Lead (Dana)",
+      "description": "Reschedule workloads deep-dive session with Matthew Elphick (MARSH) to continue discovery Q&A",
+      "owner": "Dana",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-04-01T19:00:00Z",
+      "completed_date": null,
+      "priority": "high",
+      "notes": "Call cut short due to AWS incident on Matthew's side"
+    },
+    {
+      "id": "ai-049",
+      "meeting_id": "mtg-028",
+      "meeting_title": "Workloads convo with MARSH (Matthew) and our PM Lead (Dana)",
+      "description": "Ensure Ralph completes outstanding punch list items with Matthew and Steve's team at MARSH",
+      "owner": "Brent",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-04-01T19:00:00Z",
+      "completed_date": null,
+      "priority": "medium",
+      "notes": ""
+    },
+    {
+      "id": "ai-050",
+      "meeting_id": "mtg-028",
+      "meeting_title": "Workloads convo with MARSH (Matthew) and our PM Lead (Dana)",
+      "description": "Compile MARSH cloud environment details (multi-CSP, workload types, traffic patterns) into workloads requirements doc",
+      "owner": "Dana",
+      "status": "open",
+      "due_date": null,
+      "created_date": "2026-04-01T19:00:00Z",
+      "completed_date": null,
+      "priority": "medium",
+      "notes": "MARSH: AWS primary (60%), Azure (30%), OCI, GCP. EC2, Kubernetes, Databricks, Apigee X."
     }
   ],
   "settings": {
@@ -2267,6 +2426,18 @@
       "summary": "Ralph gave shout-out to Evolving team for 2-hour testing session on Catalyst Center/NetFlow coexistence \u2014 the testing referenced in the CHOP prep session.",
       "meeting_title": "CHOP Escalation Prep Session",
       "date": "2026-03-20"
+    },
+    {
+      "channel": "DM: Brent/Pete",
+      "summary": "Pete mentioned upcoming deep dive session with Matthew Elphick and Dana on Workloads at 12 noon; Brent confirmed",
+      "meeting_title": "Workloads convo with MARSH (Matthew) and our PM Lead (Dana)",
+      "date": "2026-03-31"
+    },
+    {
+      "channel": "#product-team",
+      "summary": "Dana confirming workloads scheduling availability with Bill, noting she can work during recovery considering time zone differences",
+      "meeting_title": "Workloads convo with MARSH (Matthew) and our PM Lead (Dana)",
+      "date": "2026-03-31"
     }
   ]
 }
