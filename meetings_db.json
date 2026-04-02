@@ -1,6 +1,53 @@
 {
-  "last_sync": "2026-04-01T22:21:12Z",
+  "last_sync": "2026-04-02T16:20:08Z",
   "meetings": [
+    {
+      "id": "mtg-030",
+      "title": "Iryna Nekrasova's Personal Meeting Room",
+      "date": "2026-04-02T16:02:00Z",
+      "duration_minutes": 46,
+      "source": "krisp",
+      "source_url": "https://app.krisp.ai/t/Iryna-Nekrasova-s-Personal-Meeting-Room--019d4e4a9dcb72c89bccf44af1bfaf3e",
+      "participants": [
+        "Brent",
+        "Iryna Nekrasova",
+        "Engineering team (unidentified)"
+      ],
+      "talk_time": {
+        "Iryna Nekrasova": 99,
+        "Brent": 1
+      },
+      "key_points": [
+        "Meeting held in Iryna Nekrasova's personal meeting room (engineering + PM) to discuss the plan for redesigning the Elisity navigation menu.",
+        "Iryna announced the meeting on March 30 in #product-team: 'scheduled a meeting with the engineering team at 7 AM MT to discuss the plan for redesigning the menu' \u2014 Brent was explicitly added to the call.",
+        "Krisp captured a very sparse transcript (only 2 utterances: 'Uh, this one. And I think there's a.') from a 46-minute session \u2014 meeting likely involved screen sharing, design walkthroughs, or visual demos that Krisp does not transcribe.",
+        "Iryna has been actively engaged in UI/UX discussions \u2014 including a concurrent thread about remembering UI mode (dark/light) selection across sessions (FR-6589, Pfizer request) and menu placement decisions.",
+        "Paul Korkowski noted to Brent on April 1 that 'we also should start adding Iryna and Brian to these calls,' indicating growing cross-team involvement in product/UX discussions."
+      ],
+      "summary": "Engineering and product team meeting in Iryna Nekrasova's Zoom room to plan the redesign of the Elisity application navigation menu. Brent was added to the call by Iryna after she announced the meeting to the product team on March 30. The 46-minute session produced minimal Krisp transcript (audio not well-captured), suggesting the bulk of the meeting involved screen sharing or design artifacts. Iryna is Elisity's UX designer and is actively working on navigation/menu redesign, UI mode persistence, and other front-end experience issues.",
+      "tags": [
+        "ux-design",
+        "navigation",
+        "menu-redesign",
+        "engineering",
+        "product",
+        "internal",
+        "iryna-nekrasova"
+      ],
+      "action_items": [],
+      "slack_threads": [
+        {
+          "channel": "#product-team",
+          "summary": "Iryna Nekrasova posted on March 30 announcing the meeting with engineering at 7 AM MT to discuss menu redesign plans, and added Brent to the call.",
+          "relevance": "Direct announcement of this meeting \u2014 confirms purpose (menu redesign) and that Brent was specifically included"
+        },
+        {
+          "channel": "DM: Brent/Paul",
+          "summary": "Paul Korkowski on April 1 suggested adding Iryna and Brian Newman to upcoming calls, indicating Iryna's role is expanding in cross-functional product discussions.",
+          "relevance": "Contextualizes Iryna's growing involvement with PM/field teams around product direction"
+        }
+      ]
+    },
     {
       "id": "mtg-029",
       "title": "Review Behavioral Identity Roadmap - Round 2",
