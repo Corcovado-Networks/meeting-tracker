@@ -4731,6 +4731,18 @@
   ]
 };
 
+        // Application state
+        const app = {
+            meetings: [],
+            actionItems: [],
+            slackThreads: [],
+            settings: {},
+            lastSync: null,
+            currentTab: 'overview',
+            editingActionItem: null,
+            deletedActionItems: []
+        };
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             initializeApp();
